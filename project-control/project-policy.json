@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "project_id": "erp-kreasi-hebat",
+  "profile_id": "executor",
+  "repository_path": "/home/tejo/agentic/projects/erp-kreasi-hebat",
+  "worktree_path": "/home/tejo/agentic/projects/erp-kreasi-hebat",
+  "telegram_bot": "@NalarinLinuxKreasiHebatBot",
+  "telegram_chat": "233301028",
+  "authorized_bos_id": "233301028",
+  "approval_policy": "FULL_AUTO",
+  "protected_actions": [
+    "CHANGESET",
+    "COMMIT",
+    "PUSH",
+    "PR_CREATE",
+    "MERGE",
+    "DEPLOY",
+    "RESTART",
+    "MIGRATION",
+    "DESTRUCTIVE_DATA",
+    "CREDENTIAL",
+    "SPENDING"
+  ],
+  "prohibited_actions": [
+    "PRODUCTION_DEPLOY_BEFORE_PROD_001_APPROVED",
+    "LIVE_DATA_IMPORT_BEFORE_MIGRATION_GATE_PASS",
+    "OFFICIAL_FINANCIAL_POSTING_BEFORE_PROD_001_APPROVED",
+    "BANKING_PAYMENT_EXECUTION",
+    "AUTOMATED_TAX_FILING_OR_SUBMISSION",
+    "CREDENTIAL_VALUE_IN_CHAT_SOURCE_LOG_OR_PROJECT_CONTROL",
+    "CREDENTIAL_CREATE_OR_ROTATE_WITHOUT_TESTED_RUNBOOK",
+    "SPENDING_WITHOUT_RECORDED_NONZERO_CLASS_LIMIT",
+    "DESTRUCTIVE_FINANCIAL_DATA_HARD_DELETE",
+    "DESTRUCTIVE_DATA_ACTION_WITHOUT_VERIFIED_BACKUP_AND_RESTORE_RUNBOOK",
+    "PUBLIC_EXPOSURE_BEFORE_SECURITY_READINESS_PASS"
+  ],
+  "status": "ACTIVE"
+}

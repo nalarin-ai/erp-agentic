@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "policy": "FULL_AUTO",
+  "project_id": "erp-kreasi-hebat",
+  "profile_id": "executor",
+  "repository_path": "/home/tejo/agentic/projects/erp-kreasi-hebat",
+  "worktree_path": "/home/tejo/agentic/projects/erp-kreasi-hebat",
+  "repository_boundary": [
+    "/home/tejo/agentic/projects/erp-kreasi-hebat"
+  ],
+  "telegram_bot": "@NalarinLinuxKreasiHebatBot",
+  "telegram_chat": "233301028",
+  "telegram_identity_ref": "telegram-user:233301028",
+  "authorized_bos_id": "233301028",
+  "activated_at": "2026-08-13T08:44:09Z",
+  "activation_source": "Explicit Bos instruction from allowlisted Telegram identity 233301028; Bos confirmed the bot credential safe and directed activation.",
+  "status": "ACTIVE",
+  "revoked_at": null
+}

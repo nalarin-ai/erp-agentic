@@ -1,0 +1,22 @@
+# Risk Register
+
+- R-001 CLOSED: Prior executor Telegram token concern. Closure evidence: project binding and active standing approval already validated for dedicated bot `@NalarinLinuxKreasiHebatBot`, chat/user `233301028`; no credential content is stored here.
+- R-002 HIGH: Incorrect legal-issuer or PPN mapping could misstate invoices/tax or route payment to the wrong account. Mitigation: explicit unit→issuer/tax/payment rules, restricted overrides, and resolve O-007/O-008 before production.
+- R-003 HIGH: Indonesian accounting/tax configuration could be treated as production-ready without qualified review. Mitigation: synthetic pilot only; qualified finance/tax sign-off before official use.
+- R-004 HIGH: Conversation-driven writes could duplicate or over-authorize transactions. Mitigation: role/scope resolution, draft-first workflow, idempotency key, separated permissions, and read-after-write verification.
+- R-005 HIGH: ERPClaw maturity and AI-action surface may create ledger/security risk. Mitigation: isolated comparator only; no live data; audit commands, permissions, reversals, and invariants before selection.
+- R-006 MEDIUM: Building custom UI or specialist integrations too early expands scope. Mitigation: prove one invoice-to-receivable vertical slice on the adopted core first.
+- R-007 HIGH: Backup existence may be mistaken for recoverability. Mitigation: exercise export and restore with synthetic data and preserve evidence before production.
+- R-008 HIGH: Competing sales teams could see or capture each other's leads/customers/pricing. Mitigation: default-deny unit-scoped CRM/sales permissions and test cross-unit denial plus owner/finance roll-up explicitly.
+- R-009 MEDIUM: Future brands could force schema/permission redesign. Mitigation: model units and legal issuers as separate configurable masters; use Balonesia as a future-onboarding acceptance case.
+- R-010 HIGH: A shared or incorrectly defaulted bank account could route receivables to the wrong owner/legal issuer. Mitigation: explicit unit↔account allowlist, issuer/tax compatibility validation, restricted override, invoice preview, and post-creation audit proof.
+- R-011 HIGH: Project-bound FULL_AUTO could be mistaken for authorization to deploy/live-import/post official finance/tax actions. Mitigation: machine-readable prohibited classes remain active until PROD-001 and migration/qualified gates pass; banking execution and automated tax filing remain prohibited.
+- R-012 HIGH: Gateway isolation could coexist with leakage through native ERP UI/API/search/export/PDF/attachments/notifications. Mitigation: ISO-001 tests every native surface and rejects unsafe single-site architecture.
+- R-013 HIGH: Correct unit/issuer/tax/account with the wrong receivable ledger still misbooks AR. Mitigation: explicit ledger master/policy/posted snapshot, qualified review, and negative compatibility tests.
+- R-014 HIGH: Retry/timeout/worker takeover could duplicate provider writes. Mitigation: namespaced canonical hash, durable CAS/fencing, ERP external reference, reconciliation engine, and crash matrix.
+- R-015 HIGH: Audit loss could permit false success or unverifiable official records. Mitigation: fail-closed durable precondition, append-only integrity/export, storage alerts, uncertain state, and ERP↔audit reconciliation.
+- R-016 HIGH: Recovery-required items could remain stuck or be blindly replayed. Mitigation: REC-001 durable queue, fenced reconciliation, SLA/alerts, operator escalation, and restart tests.
+- R-017 HIGH: A backup can be internally inconsistent or undecryptable after host loss. Mitigation: consistency manifest/PITR, key recovery, immutable off-host copy, isolated restore and cross-store reconciliation.
+- R-018 MEDIUM: Hostile imports/evidence can trigger parser/resource/path/formula/privacy attacks. Mitigation: quarantine, strict limits, safe names, staging encryption/TTL, redacted errors, authorization-safe duplicate detection, and hostile fixtures.
+- R-019 MEDIUM: Open owner/expert inputs can falsely block fixture development or falsely unblock production. Mitigation: generic MIG-001 stays buildable, while MIGSRC-001, MIGDEC-001, EXP-001, and PROD-001 are explicit lifecycle nodes.
+- R-020 MEDIUM: Shared implementation paths can cause multi-agent write races. Mitigation: bounded non-overlapping owned paths, one writer lease, serialization for any intersection, and path-overlap validation before READY.
