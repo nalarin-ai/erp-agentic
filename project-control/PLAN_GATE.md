@@ -1,31 +1,34 @@
 # Plan Gate
 
-Baseline-ID: `DRAFT-034e0501ff92421900c097884dbc9d6b8520a8cafcd059d2d606e4a797bd19fc`
+Baseline-ID: `DRAFT-cb9f2583e46718d83f9fe6ae24f4e27617548d30cf9f05b0fb230f305725a846`
 VERDICT: PASS
 
-Fresh independent completion-transition review found 0 CRITICAL, 0 HIGH, and 0 unresolved MEDIUM.
+Fresh independent FND-002 completion-transition review found 0 CRITICAL, 0 HIGH, and 0 unresolved MEDIUM.
 
 Authorized state:
 
 - `PLAN-001`: DONE;
 - `FND-001`: DONE;
-- `FND-002`: READY;
+- `FND-002`: DONE;
 - `FND-003`: READY;
 - `FND-004`: READY;
+- `UNIT-001`: BACKLOG because `FND-003` remains incomplete;
 - no other task promoted.
 
 Evidence:
 
-- trusted pre-implementation commit `a742604c6ad49d7d3c5d6772fb549f6b211ddcdc`;
-- final source candidate `96fdb91fbb4cd3c10c610faacd0fae47d7b0a911dd963b120fefaf6caffba300` independently passed code QA;
-- integrated completion candidate `a5ef8d9fc8c0ccc6aa50d01821d7808e97fd1c7e91ec6ab202347081bfadd29b` independently passed transition review;
-- 14/14 domain unit tests PASS;
+- trusted implementation base `f5860d3c5482604cabca64b7d8d78e27ded3116c`;
+- final source candidate `c9971565876fa8772b5c6fd4153f218e1affe38b84818ef45f42f63599fd6088` independently passed code QA;
+- integrated transition candidate `1e4ab3f5d7fe184f657989648bdd486b6d86307664d9dcc0593ae321e2226773` independently passed transition review;
+- reviewers `deleg_bf2be0ff` and `deleg_52a426a8`, both read-only;
+- 12/12 focused authz tests and 26/26 full unit tests PASS;
+- independent behavioral matrix 15/15 PASS;
 - official mutation suite 190/190 killed;
-- validator and compileall PASS;
+- compileall and validator PASS;
 - 22 requirements, 30 plan tasks, 30 queue rows, 68 acyclic edges;
-- exact plan hash `b9d79bd75b3cb590d43198fd3ce7f079d04ce5b72b342aebbc35b9ef760ffdc5`;
-- exact queue hash `e0ce4f51642cd660e5df49df5e0b23e158f921a9798812e45cd20d18564ad1a4`;
-- scope, dependencies, statuses, paths, approval boundary, normal diff, and temporary-index diff PASS;
+- exact plan hash `c1063330c49d27b92de8383f08375954b7293c657829a7647d08137513f432bf`;
+- exact queue hash `2fbea9d11bfbfa9648861dfec771ee127c5a91931ef64e01693fbb43c27b230f`;
+- scope, dependency, path, approval boundary, prohibitions, secret/network/provider scans, and temporary-index diff PASS;
 - writer lease released to FREE.
 
-Hermes may claim one dependency-ready child task under a new one-writer lease. TDD and independent read-only QA remain mandatory. Production/live/official posting/banking/tax/destructive prohibitions remain unchanged.
+Hermes may claim one dependency-ready task under a new one-writer lease. TDD and independent read-only QA remain mandatory. Production/live/official posting/banking/tax/destructive prohibitions remain unchanged.

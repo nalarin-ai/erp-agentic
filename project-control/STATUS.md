@@ -1,12 +1,14 @@
 # Status
 
 - Public state: `COMPLETE`
-- Internal state: `FND_001_COMPLETE_NEXT_TASKS_READY`
+- Internal state: `FND_002_COMPLETE_NEXT_TASKS_READY`
 - Activation: `FULL_AUTO_ACTIVE_WITH_PRODUCTION_PROHIBITIONS`
-- Completed task: `FND-001`
-- Ready tasks: `FND-002`, `FND-003`, `FND-004`
-- Trusted pre-implementation commit: `a742604c6ad49d7d3c5d6772fb549f6b211ddcdc`
-- Completion baseline: `034e0501ff92421900c097884dbc9d6b8520a8cafcd059d2d606e4a797bd19fc`
-- Progress: FND-001 passed 14/14 unit tests, integrated gates, targeted mutation probes, independent source QA, and fresh completion-transition review with 0 CRITICAL/HIGH/unresolved MEDIUM.
+- Completed tasks: `FND-001`, `FND-002`
+- Ready tasks: `FND-003`, `FND-004`
+- Trusted implementation base: `f5860d3c5482604cabca64b7d8d78e27ded3116c`
+- Completion baseline: `cb9f2583e46718d83f9fe6ae24f4e27617548d30cf9f05b0fb230f305725a846`
+- Integrated transition candidate: `1e4ab3f5d7fe184f657989648bdd486b6d86307664d9dcc0593ae321e2226773`
+- Source QA: PASS; 0 CRITICAL, 0 HIGH, 0 unresolved MEDIUM.
+- Transition review: PASS; 0 CRITICAL, 0 HIGH, 0 unresolved MEDIUM.
 - Writer lease: `FREE`.
 - Safety: Production/live data/official posting/banking/tax execution/destructive financial actions remain prohibited or human-required.

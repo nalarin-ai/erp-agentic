@@ -106,7 +106,7 @@ Done when: every financial identity dimension is explicit and ambiguity fails cl
 **Requirements:** R-003, R-004, R-007, R-011, R-021
 **Dependencies:** FND-001
 **Owned paths:** `src/authz/**`, `tests/unit/authz/**`
-**Status:** `READY`
+**Status:** `DONE`
 
 Steps:
 1. Write actor+channel+many-to-many-unit+role+action matrix tests including zero/one/multiple assignment contexts.
