@@ -1,10 +1,12 @@
 # Status
 
-- Public state: `BLOCKED`
-- Internal state: `FND_001_CLAIM_PENDING`
+- Public state: `COMPLETE`
+- Internal state: `FND_001_COMPLETE_NEXT_TASKS_READY`
 - Activation: `FULL_AUTO_ACTIVE_WITH_PRODUCTION_PROHIBITIONS`
-- Current task: `FND-001`
-- Trusted baseline commit: `b4d384eb7c3cd5effcb9af0782a620880918d4bc`
-- Progress: PLAN-001 DONE / FND-001 READY transition baseline `f247e31afee19489ca7bec75da76792f39127b8dee5d1a80c6aba0e86b200848` received independent PASS with 0 CRITICAL/HIGH/unresolved MEDIUM.
-- Blocker: Local transition commit and writer lease claim before first RED test.
+- Completed task: `FND-001`
+- Ready tasks: `FND-002`, `FND-003`, `FND-004`
+- Trusted pre-implementation commit: `a742604c6ad49d7d3c5d6772fb549f6b211ddcdc`
+- Completion baseline: `034e0501ff92421900c097884dbc9d6b8520a8cafcd059d2d606e4a797bd19fc`
+- Progress: FND-001 passed 14/14 unit tests, integrated gates, targeted mutation probes, independent source QA, and fresh completion-transition review with 0 CRITICAL/HIGH/unresolved MEDIUM.
+- Writer lease: `FREE`.
 - Safety: Production/live data/official posting/banking/tax execution/destructive financial actions remain prohibited or human-required.

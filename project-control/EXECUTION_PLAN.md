@@ -91,7 +91,7 @@ Done when: comparator decision is evidence-backed and never treated as official 
 **Requirements:** R-004, R-005, R-006, R-007, R-008, R-017, R-019
 **Dependencies:** PLAN-001
 **Owned paths:** `src/domain/**`, `src/contracts/**`, `tests/unit/domain/**`
-**Status:** `READY`
+**Status:** `DONE`
 
 Steps:
 1. Write failing tests for money and unit/issuer/tax/series/ledger/account descriptors.
@@ -106,7 +106,7 @@ Done when: every financial identity dimension is explicit and ambiguity fails cl
 **Requirements:** R-003, R-004, R-007, R-011, R-021
 **Dependencies:** FND-001
 **Owned paths:** `src/authz/**`, `tests/unit/authz/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Write actor+channel+many-to-many-unit+role+action matrix tests including zero/one/multiple assignment contexts.
@@ -121,7 +121,7 @@ Done when: unauthorized reads/writes disclose nothing protected and make zero pr
 **Requirements:** R-016, R-017, R-019
 **Dependencies:** FND-001
 **Owned paths:** `src/policy/**`, `tests/unit/policy/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Test unit defaults, Heavy Equipment sharing, PT PPN, ledger, unknown, and override cases.
@@ -136,7 +136,7 @@ Done when: invalid combinations cannot reach adapters; fixture decisions are det
 **Requirements:** R-007, R-008
 **Dependencies:** FND-001
 **Owned paths:** `src/mutations/**`, `src/audit/**`, `db/migrations/mutation_audit/**`, `tests/mutation_audit/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Test namespaced hash, CAS claim, fencing/lease, stale worker, and every crash boundary.

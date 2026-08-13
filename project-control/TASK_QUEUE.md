@@ -9,10 +9,10 @@ Only dependency-satisfied, gate-authorized source tasks may be `READY`; statuses
 | EVAL-001 | R-005, R-006, R-009, R-016, R-017, R-019 | PLAN-001 | ERPNext evaluation/evidence | BACKLOG | pinned source/license/capability audit |
 | EVAL-002 | R-005, R-006, R-009, R-016 | EVAL-001 | ERPNext environment/scripts/evidence | BACKLOG | health + reproducible restore |
 | EVAL-003 | R-005, R-006, R-009 | PLAN-001 | isolated comparator/evidence | BACKLOG_OPTIONAL | identical synthetic rubric |
-| FND-001 | R-004, R-005, R-006, R-007, R-008, R-017, R-019 | PLAN-001 | domain/contracts/unit tests | READY | type/money/financial identity/redaction |
-| FND-002 | R-003, R-004, R-007, R-011, R-021 | FND-001 | authz paths | BACKLOG | assignment/context positive-negative matrix |
-| FND-003 | R-016, R-017, R-019 | FND-001 | policy paths | BACKLOG | exhaustive compatibility matrix |
-| FND-004 | R-007, R-008 | FND-001 | mutation/audit/migration/test paths | BACKLOG | concurrency/crash/durability evidence |
+| FND-001 | R-004, R-005, R-006, R-007, R-008, R-017, R-019 | PLAN-001 | domain/contracts/unit tests | DONE | type/money/financial identity/redaction |
+| FND-002 | R-003, R-004, R-007, R-011, R-021 | FND-001 | authz paths | READY | assignment/context positive-negative matrix |
+| FND-003 | R-016, R-017, R-019 | FND-001 | policy paths | READY | exhaustive compatibility matrix |
+| FND-004 | R-007, R-008 | FND-001 | mutation/audit/migration/test paths | READY | concurrency/crash/durability evidence |
 | UNIT-001 | R-001, R-002, R-012, R-013, R-014, R-015, R-018, R-020, R-021, R-022 | FND-001, FND-002, FND-003 | unit fixture/config paths | BACKLOG | schema+lifecycle+rollback+no-hardcode onboarding |
 | ADP-001 | R-005, R-006, R-007, R-008, R-017 | FND-001, FND-004 | fixture adapter/contracts | BACKLOG | network-disabled vertical slice |
 | REC-001 | R-007, R-008 | FND-004, ADP-001 | reconciliation UI/worker/tests/runbook | BACKLOG | crash/restart/operator queue evidence |

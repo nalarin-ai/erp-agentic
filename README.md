@@ -26,4 +26,4 @@ Isolated project owned by Hermes profile `executor`, controlled from the dedicat
 
 ## Current state
 
-The reviewed planning baseline is established. `FND-001` is the first dependency-satisfied source task selected for TDD implementation; later tasks remain gated by their canonical dependencies and independent QA.
+The reviewed planning baseline is established. `FND-001` is complete after TDD, integrated verification, and independent read-only QA. Its dependency-satisfied children `FND-002`, `FND-003`, and `FND-004` are ready; later tasks remain gated by their canonical dependencies and independent QA.
