@@ -1,15 +1,15 @@
 # Task Queue
 
-No source task is `READY`; statuses below are canonical. Dependency IDs must exactly match `EXECUTION_PLAN.md`.
+Only dependency-satisfied, gate-authorized source tasks may be `READY`; statuses below are canonical. Dependency IDs must exactly match `EXECUTION_PLAN.md`.
 
 | Task ID | Requirement scope | Dependencies | Owned path/worktree | Status | Evidence required |
 |---|---|---|---|---|---|
 | SEC-001 | R-005, R-007, R-008 | none | executor gateway | DONE | bound active policy + safety prohibitions |
-| PLAN-001 | R-001..R-022 | SEC-001 | control/plans/validator only | IN_PROGRESS | Pass 1/2 revisions + fresh Pass 3 + structural gate |
+| PLAN-001 | R-001..R-022 | SEC-001 | control/plans/validator only | DONE | Pass 1/2 revisions + fresh Pass 3 + structural gate |
 | EVAL-001 | R-005, R-006, R-009, R-016, R-017, R-019 | PLAN-001 | ERPNext evaluation/evidence | BACKLOG | pinned source/license/capability audit |
 | EVAL-002 | R-005, R-006, R-009, R-016 | EVAL-001 | ERPNext environment/scripts/evidence | BACKLOG | health + reproducible restore |
 | EVAL-003 | R-005, R-006, R-009 | PLAN-001 | isolated comparator/evidence | BACKLOG_OPTIONAL | identical synthetic rubric |
-| FND-001 | R-004, R-005, R-006, R-007, R-008, R-017, R-019 | PLAN-001 | domain/contracts/unit tests | BACKLOG | type/money/financial identity/redaction |
+| FND-001 | R-004, R-005, R-006, R-007, R-008, R-017, R-019 | PLAN-001 | domain/contracts/unit tests | READY | type/money/financial identity/redaction |
 | FND-002 | R-003, R-004, R-007, R-011, R-021 | FND-001 | authz paths | BACKLOG | assignment/context positive-negative matrix |
 | FND-003 | R-016, R-017, R-019 | FND-001 | policy paths | BACKLOG | exhaustive compatibility matrix |
 | FND-004 | R-007, R-008 | FND-001 | mutation/audit/migration/test paths | BACKLOG | concurrency/crash/durability evidence |

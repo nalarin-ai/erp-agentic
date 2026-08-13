@@ -26,4 +26,4 @@ Isolated project owned by Hermes profile `executor`, controlled from the dedicat
 
 ## Current state
 
-Planning/discovery only. No application source task is READY until the byte-exact baseline passes all required reviews and `PLAN_GATE=PASS`.
+The reviewed planning baseline is established. `FND-001` is the first dependency-satisfied source task selected for TDD implementation; later tasks remain gated by their canonical dependencies and independent QA.

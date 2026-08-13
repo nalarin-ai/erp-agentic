@@ -31,7 +31,7 @@ Done when: exact boundary and mandatory prohibitions pass and evidence contains 
 **Requirements:** R-001..R-022
 **Dependencies:** SEC-001
 **Owned paths:** `project-control/**`, `.hermes/plans/**`, `scripts/validate_plan_gate.py`
-**Status:** `IN_PROGRESS`
+**Status:** `DONE`
 
 Steps:
 1. Maintain normative product/design/traceability baseline.
@@ -91,7 +91,7 @@ Done when: comparator decision is evidence-backed and never treated as official 
 **Requirements:** R-004, R-005, R-006, R-007, R-008, R-017, R-019
 **Dependencies:** PLAN-001
 **Owned paths:** `src/domain/**`, `src/contracts/**`, `tests/unit/domain/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Write failing tests for money and unit/issuer/tax/series/ledger/account descriptors.

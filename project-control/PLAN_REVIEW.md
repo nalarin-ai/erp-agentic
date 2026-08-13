@@ -225,3 +225,5 @@ Local structural evidence: 190/190 mutants, validator PASS, 22 requirements, 30 
 Status: `REVISE` — WA-001 HIGH (stale manifest-bound Hermes plan) and WA-002 MEDIUM (candidate whitespace EOF) found by fresh review. Both revised.
 
 Fresh closure review 2: `PASS` on baseline `6430dcfff02badc5b420c3e7714b0c10960097fcf3a24a75cb1174cde1dd2094` with 0 CRITICAL, 0 HIGH, and 0 unresolved MEDIUM. WA-001 and WA-002 are independently verified closed; 32-file manifest, 190/190 mutations, 22/30/30/68 structural counts, exact hashes, full-candidate whitespace, ignored local Claude settings, approval boundary, and prohibitions all PASS.
+
+Control transition review: `PASS` on baseline `f247e31afee19489ca7bec75da76792f39127b8dee5d1a80c6aba0e86b200848` with 0 CRITICAL, 0 HIGH, and 0 unresolved MEDIUM. Only PLAN-001 became DONE and its dependency-ready child FND-001 became READY; no requirement, dependency, path, task, or evidence contract drifted.

@@ -1,10 +1,10 @@
 # Status
 
 - Public state: `BLOCKED`
-- Internal state: `PLAN_GATE_PASS_INITIAL_COMMIT_PENDING`
+- Internal state: `FND_001_CLAIM_PENDING`
 - Activation: `FULL_AUTO_ACTIVE_WITH_PRODUCTION_PROHIBITIONS`
-- Current task: `PLAN-001`
-- Last verified: `2026-08-13T13:03:53Z`
-- Progress: Hermes sole-writer amendment baseline `6430dcfff02badc5b420c3e7714b0c10960097fcf3a24a75cb1174cde1dd2094` received fresh independent PASS with 0 CRITICAL/HIGH/unresolved MEDIUM; 190/190 mutations and all structural/full-candidate checks PASS.
-- Blocker: Trusted initial local commit and a separately reviewed byte-exact PLAN-001 DONE / FND-001 READY transition are required before source coding.
+- Current task: `FND-001`
+- Trusted baseline commit: `b4d384eb7c3cd5effcb9af0782a620880918d4bc`
+- Progress: PLAN-001 DONE / FND-001 READY transition baseline `f247e31afee19489ca7bec75da76792f39127b8dee5d1a80c6aba0e86b200848` received independent PASS with 0 CRITICAL/HIGH/unresolved MEDIUM.
+- Blocker: Local transition commit and writer lease claim before first RED test.
 - Safety: Production/live data/official posting/banking/tax execution/destructive financial actions remain prohibited or human-required.
