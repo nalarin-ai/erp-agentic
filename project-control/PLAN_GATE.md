@@ -1,6 +1,6 @@
 # Plan Gate
 
-Baseline-ID: `DRAFT-6cf893179f7d65d81e3272c039432a14d029ce9352c300b71167daf7f327bba0`
+Baseline-ID: `DRAFT-8b2c1888ded6619e4389d13d276ed0f1f0f92a6cd06bb6d7da90836940e67b39`
 VERDICT: PASS
 
 Fresh independent FLOW-003 QA round 3 final (`deleg_f06542a4`, read-only) verdict PASS, zero findings: semua closure round-1/round-2/2.5 terverifikasi via probe independen baru (reconcile authz deny+audit, replay-after-PAID recorded+fresh status, M6/M7/M9 workflow guards, read-back orphan → reconciliation enqueue, ABSENT cross-unit tetap UNCERTAIN tanpa disclosure, early-deny audited, anchor deterministik PYTHONHASHSEED=0 stabil 3x); 12 probe adversarial baru PASS (zero/negative amount, exact open_amount boundary, concurrent record+reconcile race, PRESENT cross-unit, reconcile replay idempotency, aging sum invariant, dll.); mutation spot-check 5/5 KILLED; Done-when evidenced: balances reconcile dari provider read-back dan chat text saja tidak dapat mengonfirmasi payment. Focused suite 55/55 PASS; full suite 506/506 kecuali 1 pre-existing CRM-001 state-dependent fixture defect (`test_export_is_scope_bounded_with_evidence`, terkonfirmasi gagal di clean tree tanpa kandidat FLOW-003 via git stash; di luar owned paths; backlog teknis tercatat di STATUS.md).
@@ -22,6 +22,7 @@ Authorized state:
 - `CRM-001`: DONE;
 - `FLOW-002`: DONE;
 - `FLOW-003`: DONE;
+- `RPT-001`: DONE;
 - no other task promoted.
 
 Evidence:
@@ -60,3 +61,5 @@ Hermes may claim one dependency-ready task under a new one-writer lease. TDD and
 - fresh independent QA retry round 2 (`deleg_5fd55237`): PASS_WITH_FINDINGS — F-01/F-02 CLOSED, mutants 3/3 KILLED; 2 MEDIUM baru (read-back orphan claim tanpa linkage/enqueue; ABSENT reconcile cross-unit tanpa scope filter) + 1 LOW (early-deny tanpa audit) — remediated via TDD (read-back failure/mismatch → full linkage + `_pending_uncertain` + enqueue + audit + blind-retry blocked; ABSENT path scope-filtered, foreign claim tetap UNCERTAIN tanpa disclosure; denial audit di early-deny paths);
 - flaky `TestReconcileAbsentScope` didiagnosis root cause: hash-order-dependent unit anchoring di reconcile — diperbaiki deterministik (anchor dari claim/evidence yang direkonsiliasi); stabil 10x isolated + 5x focused + PYTHONHASHSEED=0;
 - final independent QA round 3 (`deleg_f06542a4`): PASS zero findings — semua closure diverifikasi via probe independen, 12 probe adversarial baru PASS, mutation spot-check 5/5 KILLED, Done-when evidenced (balances reconcile dari read-back; chat-only tidak mengonfirmasi payment); focused 55/55 PASS (stabil 3x + hash-seed pinned); compileall PASS; `git diff --check` PASS; plan validator PASS baseline `6cf89317`.
+- RPT-001: TDD — RED (ModuleNotFoundError) → GREEN 28/28; owner roll-up service (per-unit authorized aggregation via QUERY_RECEIVABLE, discriminator REQUIRED_ROLE=OWNER, tanpa ledger merge, mixed-currency tidak pernah dijumlahkan silang, no-cache → revocation efektif seketika) + UI view (opaque refs); independent QA round 1 (`deleg_81a4e174`): PASS_WITH_FINDINGS — 1 MEDIUM (naive `at` datetime → raw TypeError escape unaudited), 3 LOW (surviving mutants M2 per-unit authorize, M6 denial message, M8 identity pre-check), 2 INFO — remediated via TDD (10 regression tests RED-first): `_is_valid_at` guard → WorkflowDenied INVALID_INPUT + audit, duplicate-assignment-denied test, exact-message assertion, IDENTITY_UNVERIFIED pre-check test; mutants re-hunted: M2/M6 KILLED oleh subagent, M8 KILLED diverifikasi parent di /tmp copy (3/3);
+- fresh independent QA round 2 final (`deleg_55c4fe47`): PASS, zero findings above INFO — semua closure r1 diverifikasi via 12 probe independen baru (naive/wrong-type at denied+audited, aware non-UTC accepted+normalized, duplicate assignments denied, exact generic message), sweep adversarial baru PASS (boundary expiry, not-yet-effective, revoked binding, same-currency cross-unit summation benar, empty result render, audit completeness), mutation spot-check 5/5 KILLED; Done-when evidenced: roll-up reconciles vs synthetic ledger + unit users tanpa cross-unit data; focused 38/38 PASS; compileall PASS; `git diff --check` PASS; plan validator PASS baseline `8b2c1888`; 1 INFO (export tanpa row cap — scope-bounded server-side, diterima untuk MVP).
