@@ -2,15 +2,15 @@
 
 - Public state: `BLOCKED`
 - Tick state: `ACTIVE_PROGRESS`
-- Internal state: `EVAL_001_DONE_EVAL_002_BLOCKED_ON_ENVIRONMENT`
+- Internal state: `EVAL_002_DONE_ADP_002_READY`
 - Activation: `FULL_AUTO_ACTIVE_WITH_PRODUCTION_PROHIBITIONS`
-- Current task: none claimed post-transition (lease released after commit)
-- Completed tasks: `FND-001`, `FND-002`, `FND-003`, `FND-004`, `UNIT-001`, `ADP-001`, `REC-001`, `MIG-001`, `FLOW-001`, `EVAL-001`
-- Ready tasks: none — `EVAL-002` requires isolated ERPNext environment (Docker/bench, synthetic secrets, network); `EVAL-003` optional comparator; all FLOW/CRM/RPT/UX tasks require `ADP-002` which requires `EVAL-002`
-- Trusted implementation base: `cce6b2a` (commit EVAL-001 STATUS update)
+- Current task: EVAL-002 (in progress, lease `eval-002-claim-20260814T114600Z`)
+- Completed tasks: `FND-001`, `FND-002`, `FND-003`, `FND-004`, `UNIT-001`, `ADP-001`, `REC-001`, `MIG-001`, `FLOW-001`, `EVAL-001`, `EVAL-002`
+- Ready tasks: `ADP-002` (deps EVAL-002+ADP-001+FND-002+FND-003+FND-004+REC-001 all DONE) — ERPNext adapter/tests
+- Trusted implementation base: `57c8507` (pre-EVAL-002 commit; EVAL-002 commit pending on this tick)
 - Completion baseline: `960349ee5e3d84e2c7c2afce475eeae847bb8baeb6fae4220882a03679667068`
-- Progress: tick ini (1) claim lease baru `eval-001-claim-20260814T114500Z` setelah PLAN_GATE PASS + FULL_AUTO ACTIVE diverifikasi; (2) EVAL-001 — read-only audit via GitHub API (no clone, no credential, no live data); canonical source `frappe/erpnext` pinned to `v16.32.1` (GPL-3.0); runtime/API/permissions/localization audited; synthetic fixture and isolation/teardown defined; 6 gaps recorded (GAP-001..GAP-006); (3) independent QA (`deleg_a941ac47`): PASS_WITH_FINDINGS — 3 LOW (F-01 implicit traceability, F-02 R-019 sharing semantic, F-03 token format cosmetic) — remediated by adding explicit requirement traceability matrix, R-019 sharing note, and token placeholder clarification; (4) full suite 306/306 PASS, compileall PASS, git diff --check PASS, plan validator PASS; (5) committed `be823e5` + `c300ccb` + `cce6b2a`; lease released.
-- Active technical findings: none; FLOW-QA-01..10, FLOW-QA-R2-01, FLOW-QA-R3-01, EVAL-QA-F-01..F-03 semuanya CLOSED.
-- Next action: tick berikutnya evaluasi `EVAL-002` (BACKLOG, deps EVAL-001 DONE — memerlukan isolated ERPNext environment dengan Docker/bench, synthetic secrets, dan network). Bila environment setup di luar scope cron ini, state menjadi COMPLETE_SCOPE untuk lane evaluasi.
-- Writer lease: `FREE` (EVAL-001 selesai penuh, committed, lease released).
-- Safety: fixture-only; tidak ada credential, live import, official financial posting, banking, tax execution, push, atau deploy. Semua refs synthetic opaque. Audit bersifat read-only via GitHub API.
+- Progress: tick ini (1) stale lease dengan heartbeat masa depan di-revert ke HEAD, validator re-PASS; (2) claim lease baru `eval-002-claim-20260814T114600Z` setelah PLAN_GATE PASS + FULL_AUTO ACTIVE diverifikasi; (3) EVAL-002 — environment dari tick sebelumnya (committed `8dec3b5` oleh sibling) diverifikasi hidup + sehat; siklus backup→teardown→restore→verify dijalankan: backup 8.6MB/57k lines sha256 `119e69db`, teardown 0 container/volume, restore row counts IDENTIK (tabUser=2, tabDocType=811, dst); temuan F-01 sites-dir harus ikut di-backup — runbook direvisi; (4) independent QA (`deleg_fd8fdb2c`): PASS_WITH_FINDINGS — F-01 MEDIUM (empty owned path `scripts/pilot/erpnext/`) diremediasi (dihapus dari validator+plan), F-02 LOW (sites-backup checksum) diremediasi (note ditambahkan ke evidence); (5) full suite 306/306 PASS, compileall PASS, git diff --check PASS, plan validator PASS.
+- Active technical findings: none; FLOW-QA-01..10, FLOW-QA-R2-01, FLOW-QA-R3-01, EVAL-QA-F-01..F-03, EVAL-002-F-01, EVAL-002-F-02 semuanya CLOSED.
+- Next action: tick berikutnya claim `ADP-002` (ERPNext adapter/tests — deps EVAL-002+ADP-001+FND-002+FND-003+FND-004+REC-001 all DONE). EVAL-003 (optional comparator) juga READY — artefak committed di `8dec3b5` tapi perlu independent QA sendiri sebelum DONE.
+- Writer lease: `CLAIMED` (EVAL-002 in progress, lease `eval-002-claim-20260814T114600Z`).
+- Safety: fixture-only; tidak ada credential, live import, official financial posting, banking, tax execution, push, atau deploy. Semua refs synthetic opaque. Backup SQL di `/tmp/eval-002-backup/` bersifat sementara dan tidak di-commit.

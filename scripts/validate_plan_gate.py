@@ -65,7 +65,7 @@ REQUIRED_EDGES = {
 }
 EXPECTED_STATUS = {
     "SEC-001": "DONE", "PLAN-001": "DONE",
-    "EVAL-001": "DONE", "EVAL-002": "BACKLOG", "EVAL-003": "BACKLOG_OPTIONAL",
+    "EVAL-001": "DONE", "EVAL-002": "DONE", "EVAL-003": "BACKLOG_OPTIONAL",
     "FND-001": "DONE", "FND-002": "DONE", "FND-003": "DONE", "FND-004": "DONE",
     "UNIT-001": "DONE", "ADP-001": "DONE", "REC-001": "DONE", "ADP-002": "BACKLOG",
     "CRM-001": "BACKLOG", "ISO-001": "BACKLOG", "ISOFIX-001": "BACKLOG",
@@ -81,7 +81,7 @@ EXPECTED_OWNED_PATHS = {'ADP-001': ['src/adapters/fixture/**', 'tests/contracts/
  'ADP-002': ['src/adapters/erpnext/**', 'tests/integration/erpnext/**'],
  'CRM-001': ['src/crm/**', 'src/adapters/erpnext_crm/**', 'tests/crm/**'],
  'EVAL-001': ['evaluation/erpnext/**', 'docs/evidence/erpnext-audit/**'],
- 'EVAL-002': ['environments/erpnext-pilot/**', 'scripts/pilot/erpnext/**', 'docs/evidence/erpnext-runtime/**'],
+ 'EVAL-002': ['environments/erpnext-pilot/**', 'docs/evidence/erpnext-runtime/**'],
  'EVAL-003': ['evaluation/erpclaw/**', 'environments/erpclaw-pilot/**', 'docs/evidence/erpclaw/**'],
  'EXP-001': ['docs/evidence/qualified-review/**', 'project-control/PRODUCTION_READINESS.md'],
  'FLOW-001': ['src/workflows/invoice_draft/**', 'src/channels/**', 'tests/workflows/invoice_draft/**'],
@@ -214,8 +214,8 @@ def validate_types(data: dict, types: dict[str, type], prefix: str, failures: li
 TASK_ID = r"[A-Z]+-[0-9]{3}"
 DEP_VALUE = re.compile(rf"^(?:none|{TASK_ID}(?:, {TASK_ID})*)$")
 EXPECTED_MACHINE_FILE_SHA256 = {
-    "EXECUTION_PLAN.md": "4dd844a0e17ccf1aa96923f4567272aea862896f7bc65571fc8f63c11cf702ac",
-    "TASK_QUEUE.md": "77e80655564e8c1f7ba99f9316a349bda49fcdd2f53271e062d7a74782e5a1ae",
+    "EXECUTION_PLAN.md": "40b4deffd4e4ac27cb4f39cf5f14e23914fa7656191300c5c4dd8873f89fd63b",
+    "TASK_QUEUE.md": "c5f4998796f6c54bf763a75fa072b627e9bea6507e12bdd53bfc0e61e1f4f798",
 }
 
 

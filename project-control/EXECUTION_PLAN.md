@@ -60,8 +60,8 @@ Done when: reproducible audited candidate baseline exists.
 
 **Requirements:** R-005, R-006, R-009, R-016
 **Dependencies:** EVAL-001
-**Owned paths:** `environments/erpnext-pilot/**`, `scripts/pilot/erpnext/**`, `docs/evidence/erpnext-runtime/**`
-**Status:** `BACKLOG`
+**Owned paths:** `environments/erpnext-pilot/**`, `docs/evidence/erpnext-runtime/**`
+**Status:** `DONE`
 
 Steps:
 1. Build non-production configuration with local synthetic secrets.
