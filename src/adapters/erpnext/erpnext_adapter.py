@@ -6,6 +6,9 @@ instance (EVAL-002). It uses HTTP REST API only, never direct DB access.
 Security invariants:
 - All refs are synthetic opaque (CUST-*, INV-*, PAY-*, EVI-*, ACC-*).
 - No credentials in code; connection config injected via constructor.
+- Auth is session-based: POST /api/method/login once, then reuse the
+  session cookie. The admin password is never sent as a token header
+  and never leaks into request URLs or non-login request bodies.
 - Scoped queries intersect server-side filters with caller's authorized scope.
 - Draft creation reserves nothing; official number only after verified post.
 - Posting is idempotent via ERPNext naming + idempotency key.
@@ -16,9 +19,11 @@ from __future__ import annotations
 
 import json
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from decimal import Decimal
+from http.cookiejar import CookieJar
 from typing import Any
 
 from src.contracts.erp_port import (
@@ -74,10 +79,43 @@ class ErpNextAdapter:
         self._scope = authorized_scope
         self._base = config.base_url.rstrip("/")
         self._headers = {
-            "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": f"token administrator:{config.admin_password}",
         }
+        self._cookies = CookieJar()
+        self._opener = urllib.request.build_opener(
+            urllib.request.HTTPCookieProcessor(self._cookies)
+        )
+        self._logged_in = False
+
+    # -- session auth ---------------------------------------------------------
+
+    def _login(self) -> None:
+        """Establish session via POST /api/method/login.
+
+        The admin password is only sent in the login form body, never
+        as a token header and never in a URL. Session cookies are stored
+        in the adapter's CookieJar and reused by subsequent requests.
+        """
+        url = f"{self._base}/api/method/login"
+        body = urllib.parse.urlencode(
+            {"usr": "Administrator", "pwd": self._config.admin_password}
+        ).encode()
+        req = urllib.request.Request(
+            url,
+            data=body,
+            headers={"Accept": "application/json"},
+            method="POST",
+        )
+        try:
+            with self._opener.open(req, timeout=self._config.timeout_seconds) as resp:
+                payload = json.loads(resp.read().decode())
+        except urllib.error.HTTPError as e:
+            raise UncertainOutcome(f"ERPNext login failed: HTTP {e.code}") from e
+        except urllib.error.URLError as e:
+            raise UncertainOutcome(f"ERPNext login connection failed: {e.reason}") from e
+        if not isinstance(payload, dict) or "message" not in payload:
+            raise UncertainOutcome("ERPNext login returned unexpected payload")
+        self._logged_in = True
 
     # -- internal HTTP helpers -----------------------------------------------
 
@@ -88,23 +126,35 @@ class ErpNextAdapter:
         data: dict[str, Any] | None = None,
         params: dict[str, str] | None = None,
     ) -> dict[str, Any]:
-        """Make HTTP request to ERPNext API."""
-        url = f"{self._base}{path}"
+        """Make HTTP request to ERPNext API using session cookies."""
+        if not self._logged_in:
+            self._login()
+        # URL-encode path segments (e.g. "Sales Invoice" -> "Sales%20Invoice").
+        encoded_path = urllib.parse.quote(path, safe="/")
+        url = f"{self._base}{encoded_path}"
         if params:
-            query = "&".join(f"{k}={v}" for k, v in params.items())
+            query = urllib.parse.urlencode(params)
             url = f"{url}?{query}"
 
+        headers = dict(self._headers)
+        if data is not None:
+            headers["Content-Type"] = "application/json"
         req = urllib.request.Request(
             url,
             data=json.dumps(data).encode() if data else None,
-            headers=self._headers,
+            headers=headers,
             method=method,
         )
 
         try:
-            with urllib.request.urlopen(req, timeout=self._config.timeout_seconds) as resp:
+            with self._opener.open(req, timeout=self._config.timeout_seconds) as resp:
                 return json.loads(resp.read().decode())
         except urllib.error.HTTPError as e:
+            if e.code in (401, 403) and self._logged_in:
+                # Session expired — re-login once and retry.
+                self._logged_in = False
+                self._login()
+                return self._request(method, path, data=data, params=params)
             body = e.read().decode()
             try:
                 err = json.loads(body)
