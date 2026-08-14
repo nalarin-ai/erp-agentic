@@ -24,7 +24,7 @@ Only dependency-satisfied, gate-authorized source tasks may be `READY`; statuses
 | FLOW-002 | R-004, R-005, R-006, R-007, R-008, R-016, R-017, R-019, R-020, R-021, R-022 | FLOW-001, ADP-002, REC-001 | invoice post/tests | DONE | immutable branding/config snapshot + verified post |
 | FLOW-003 | R-006, R-007, R-008, R-013, R-017, R-019 | FLOW-002 | payment/receivable/tests | DONE | balances/evidence/privacy |
 | REM-001 | R-006, R-007, R-011, R-021 | FLOW-003, FND-002 | reminders/tests | BACKLOG_POST_MVP | schedule/dedupe/privacy/failure |
-| RPT-001 | R-001, R-011, R-021 | FND-002, FLOW-003 | owner report UI/service/tests | BACKLOG | reconciled aggregation/no leakage |
+| RPT-001 | R-001, R-011, R-021 | FND-002, FLOW-003 | owner report UI/service/tests | READY | reconciled aggregation/no leakage |
 | UX-001 | R-004, R-006, R-007, R-011, R-020, R-021, R-022 | FLOW-001, FLOW-002, FLOW-003 | bounded UI/test/evidence paths | BACKLOG | responsive/keyboard/config lifecycle/independent review |
 | MIG-001 | R-005, R-008 | FND-001, ADP-001 | import/test paths | DONE | hostile fixtures + dry-run/reconcile |
 | MIGSRC-001 | R-005, R-008 | MIG-001, ADP-002 | migration profile/maps/sanitized fixtures | BLOCKED_OWNER_INPUT | source-specific trial reconciliation |

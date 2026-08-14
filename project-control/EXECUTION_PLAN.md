@@ -316,7 +316,7 @@ Done when: reminders cannot duplicate, disclose, or send after terminal receivab
 **Requirements:** R-001, R-011, R-021
 **Dependencies:** FND-002, FLOW-003
 **Owned paths:** `src/reports/owner/**`, `ui/reports/owner/**`, `tests/reports/owner/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Test unit/issuer summaries against synthetic ledgers.
