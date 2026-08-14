@@ -4,7 +4,7 @@
 - Owner: hermes-executor (cron tick 2026-08-14T22:41Z)
 - Task: `ISO-001` — native ERP isolation qualification (R-003, R-011, R-021)
 - Owned paths: `tests/security/native_erp/**`, `docs/evidence/native-isolation/**`
-- Heartbeat: `2026-08-14T22:41:40Z` (pre-mutation)
+- Heartbeat: `2026-08-14T22:41:40Z` (pre-mutation); `2026-08-14T22:50:00Z` (claim committed `1384b21`, validator PASS, implementer dispatch)
 - Claim basis: OPS-001 DONE + committed (HEAD, post-commit verified); ISO-001 deps (EVAL-002, UNIT-001, CRM-001) lengkap; LOCK FREE → CLAIMED; ISO-001 READY deterministik pertama dalam urutan queue.
 - Last task: `OPS-001` — DONE (QA r2/r3 remediated, final confirmation PASS zero findings; focused 78/78 (1 skip), full 703 = 2 pre-existing fixture defects; validator PASS; commit `fbb65a4` + baseline `53c1e81`)
 - Released at: `2026-08-14T22:31:28Z`
