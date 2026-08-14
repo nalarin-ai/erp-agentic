@@ -21,7 +21,7 @@ Only dependency-satisfied, gate-authorized source tasks may be `READY`; statuses
 | ISO-001 | R-003, R-011, R-021 | EVAL-002, UNIT-001, CRM-001 | native security tests/evidence | BACKLOG | all native surfaces + ADR |
 | ISOFIX-001 | R-003, R-011, R-021 | ISO-001 | final isolation runtime/source/tests/evidence | BACKLOG | implemented final architecture + fresh ISOLATION_FINAL=PASS |
 | FLOW-001 | R-003, R-004, R-006, R-007, R-011, R-016, R-017, R-019, R-020, R-021, R-022 | FND-002, FND-003, ADP-001, UNIT-001 | invoice draft/channel/tests | DONE | unit/config state transcripts + zero writes |
-| FLOW-002 | R-004, R-005, R-006, R-007, R-008, R-016, R-017, R-019, R-020, R-021, R-022 | FLOW-001, ADP-002, REC-001 | invoice post/tests | BACKLOG | immutable branding/config snapshot + verified post |
+| FLOW-002 | R-004, R-005, R-006, R-007, R-008, R-016, R-017, R-019, R-020, R-021, R-022 | FLOW-001, ADP-002, REC-001 | invoice post/tests | DONE | immutable branding/config snapshot + verified post |
 | FLOW-003 | R-006, R-007, R-008, R-013, R-017, R-019 | FLOW-002 | payment/receivable/tests | BACKLOG | balances/evidence/privacy |
 | REM-001 | R-006, R-007, R-011, R-021 | FLOW-003, FND-002 | reminders/tests | BACKLOG_POST_MVP | schedule/dedupe/privacy/failure |
 | RPT-001 | R-001, R-011, R-021 | FND-002, FLOW-003 | owner report UI/service/tests | BACKLOG | reconciled aggregation/no leakage |

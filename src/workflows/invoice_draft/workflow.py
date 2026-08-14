@@ -654,6 +654,57 @@ class InvoiceDraftWorkflow:
                 lines=tuple(MappingProxyType(dict(line)) for line in state.lines),
             )
 
+    # -- FLOW-002 additive helpers (no behavior change for FLOW-001) ----------
+
+    def get_draft_opener(self, draft_id: str) -> str:
+        """Public accessor for the opener's actor_ref (FLOW-002 self-post guard)."""
+        with self._lock:
+            return self._get(draft_id).actor_ref
+
+    def recompute_preview_expectation(
+        self, draft_id: str, *, at: datetime
+    ) -> dict[str, Any]:
+        """Authoritative re-derivation of every preview field from CURRENT state.
+
+        FLOW-002 F-01: post/reconcile must never trust a caller-supplied
+        Preview. This helper re-runs the exact computation ``preview`` used —
+        current draft lines, active settings, resolved policy identity — and
+        returns the expected field values (including ``preview_hash``) so the
+        posting workflow can require exact equality.
+        """
+        with self._lock:
+            state = self._get(draft_id)
+            unit_code = self._unit_code_for_ref(state.unit_ref)
+            active = self._settings.get_active(unit_code, at=at)
+            currency = active.settings.get("default_currency", "IDR")
+            template_ref = active.settings.get("invoice_template_ref")
+            resolved = self._resolve_identity(state.unit_ref, currency, at)
+            total = sum(
+                (Decimal(line["quantity"]) * Decimal(line["unit_price_amount"])
+                 for line in state.lines),
+                Decimal(0),
+            )
+            descriptor = resolved.to_redacted_descriptor()
+            expected_hash = self._hash(state, active.configuration_version,
+                                       descriptor, total)
+            identity = resolved.identity
+            return {
+                "draft_id": state.draft_id,
+                "unit_ref": state.unit_ref,
+                "customer_ref": state.customer_ref,
+                "currency": currency,
+                "total_amount": self._format_money(total),
+                "invoice_template_ref": template_ref,
+                "logo_asset_ref": active.settings.get("logo_asset_ref"),
+                "configuration_version": active.configuration_version,
+                "legal_issuer_ref": identity.legal_issuer_ref,
+                "tax_profile_ref": identity.tax_profile_ref,
+                "invoice_series_ref": identity.invoice_series_ref,
+                "receivable_ledger_ref": identity.receivable_ledger_ref,
+                "destination_account_alias": descriptor["identity"]["destination_account_alias"],
+                "preview_hash": expected_hash,
+            }
+
     def audit_events(self, draft_id: str) -> list[dict[str, Any]]:
         with self._lock:
             self._get(draft_id)

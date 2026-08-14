@@ -271,7 +271,7 @@ Done when: users get complete preview or precise safe blocker without guessing.
 **Requirements:** R-004, R-005, R-006, R-007, R-008, R-016, R-017, R-019, R-020, R-021, R-022
 **Dependencies:** FLOW-001, ADP-002, REC-001
 **Owned paths:** `src/workflows/invoice_post/**`, `tests/workflows/invoice_post/**`
-**Status:** `BACKLOG`
+**Status:** `DONE`
 
 Steps:
 1. Test review separation, stale unit/config/branding preview, template placeholder safety, orthogonal states, and supported cancellation.

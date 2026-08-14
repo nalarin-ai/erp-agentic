@@ -23,6 +23,7 @@ _ROLE_ACTIONS = {
     "FINANCE-REVIEWER": frozenset(
         {"LEAD-READ", "QUOTATION-DRAFT", "INVOICE_PREVIEW", "PAYMENT_RECORD", "QUERY_RECEIVABLE"}
     ),
+    "FINANCE-POSTER": frozenset({"INVOICE_POST"}),
     "OWNER": frozenset(
         {
             "LEAD-READ",
