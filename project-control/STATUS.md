@@ -4,9 +4,9 @@
 - Tick state: `ACTIVE_PROGRESS`
 - Internal state: `UX_001_DONE_NEXT_READY_CLAIM_PENDING`
 - Activation: `FULL_AUTO_ACTIVE_WITH_PRODUCTION_PROHIBITIONS`
-- Current task: none claimed (lease released after UX-001 transition)
+- Current task: `OPS-001` claimed (lease CLAIMED `2026-08-14T20:25:16Z`, heartbeat pre-mutation)
 - Completed tasks: `FND-001`, `FND-002`, `FND-003`, `FND-004`, `UNIT-001`, `ADP-001`, `REC-001`, `MIG-001`, `FLOW-001`, `EVAL-001`, `EVAL-002`, `ADP-002`, `CRM-001`, `FLOW-002`, `FLOW-003`, `RPT-001`, `UX-001`
-- Ready tasks: `OPS-001`, `ISO-001`
+- Ready tasks: `OPS-001` (claimed), `ISO-001`
 - Trusted implementation base: UX-001 transition commit (lihat git log HEAD)
 - Completion baseline: `3dc1e3176a7df7c084a240a582a31a0ff7d64eb3a54bc4ec5da0bb43a4141fd9`
 - Progress (UX-001): (1) stale lease tick 16:21Z direklaim — kandidat uncommitted diverifikasi (focused 69/69; compileall PASS; `git diff --check` PASS; validator PASS; secret-scan bersih; owned-paths compliance OK; heartbeat `19:47Z`); (2) independent UX/a11y QA round 1 (`deleg_f71db8c7`): PASS_WITH_FINDINGS — 3 MEDIUM (F-01/F-02 raw `reason` interpolation leak; F-03 SoD self-post guard fail-open saat `audit_events` kosong), 5 LOW (F-04..F-08), 3 INFO; (3) remediasi TDD (`deleg_c2b9abc4`): 12 regression tests RED-first → F-01..F-09 closed (pesan generik statis; `opener_ref` keyword-only wajib; fallback copy duplikat; tab_order dari footer_actions; control_types dibatasi skema; parse defensif + evidence_upload wajib; rollup fail-closed partial-null; matrix 81) → focused 81/81; heartbeat `20:04Z`; (4) fresh independent QA round 2 final (`deleg_1bb3ced2`): PASS zero findings >INFO — 15/15 closure via probe baru, sweep adversarial 14 probe bersih, mutation spot-check 4/4 KILLED, matrix spot-check 11/11; (5) transition: TASK_QUEUE/EXECUTION_PLAN UX-001 → DONE, validator EXPECTED_STATUS + machine-file hashes resynced, PLAN_GATE baseline `3dc1e317` PASS; lease FREE `20:21:55Z`.

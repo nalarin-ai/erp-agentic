@@ -376,7 +376,7 @@ Done when: trial reconciles and repository contains no live secrets/data.
 **Requirements:** R-008, R-009, R-016
 **Dependencies:** EVAL-002, FND-004, ADP-002, REC-001
 **Owned paths:** `ops/**`, `scripts/backup/**`, `docs/runbooks/operations/**`, `tests/operations/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Define application-consistent multi-store backup manifest, RPO/RTO, encryption-key recovery, immutable off-host retention, and isolated identity/network restore.
