@@ -192,3 +192,29 @@ class ErpPort(Protocol):
     def ping(self) -> bool:
         """Liveness probe (fixture: always True unless failure injected)."""
         ...
+
+    # -- reconciliation read-back surface (REC-001; provider-neutral) ------------
+
+    def reconcile_post(self, draft_reference: str) -> PostingResult:
+        """Classify an UNCERTAIN post via authoritative read-back.
+
+        Never a blind reissue: returns POSTED with the official reference
+        when the provider applied the intent, otherwise a non-POSTED outcome.
+        """
+        ...
+
+    def reconcile_payment(self, evidence_ref: str) -> PaymentRecord:
+        """Classify an uncertain payment by its reserved evidence reference.
+
+        Raises ``DocumentRejected`` when the provider has no such evidence
+        reference (treated as ABSENT by the reconciliation engine).
+        """
+        ...
+
+    def known_draft_refs(self) -> set[str]:
+        """Snapshot of every draft handle this provider issued (orphan checks)."""
+        ...
+
+    def payment_evidence_index(self) -> tuple[tuple[str, str], ...]:
+        """(payment_ref, evidence_ref) pairs for payment orphan cross-checks."""
+        ...

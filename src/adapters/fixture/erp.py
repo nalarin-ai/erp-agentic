@@ -144,6 +144,7 @@ class FixtureErpAdapter:
         self._payments: dict[str, _PaymentState] = {}
         self._evidence_refs: set[str] = set()
         self._deliveries: dict[tuple[str, str], DeliveryRecord] = {}
+        self._index_dropped: set[str] = set()
         self._lock = threading.RLock()
         # Failure injection (test-only knobs)
         self._fail_next_post: str | None = None
@@ -170,6 +171,17 @@ class FixtureErpAdapter:
 
     def simulate_outage(self, unavailable: bool) -> None:
         self._outage = bool(unavailable)
+
+    def corrupt_index_drop(self, draft_ref: str) -> None:
+        """Test-only: make the query index 'forget' a POSTED document.
+
+        Simulates a provider whose read-back says POSTED while its search
+        index disagrees — the reconciliation engine must classify this as
+        AMBIGUOUS and escalate, never auto-retry.
+        """
+        with self._lock:
+            state = self._lookup_invoice(draft_ref)
+            self._index_dropped.add(state.official_ref or draft_ref)
 
     def _assert_available(self) -> None:
         if self._outage:
@@ -220,6 +232,7 @@ class FixtureErpAdapter:
                     "customer_ref": command.customer_ref,
                     "identity": identity,
                     "lines": normalized_lines,
+                    "draft_ref": draft_ref,
                 },
             )
             return draft_ref
@@ -490,6 +503,8 @@ class FixtureErpAdapter:
                 ref = state.official_ref or state.draft_ref
                 if ref in seen:
                     continue
+                if ref in self._index_dropped:
+                    continue  # test-only corruption: index lost this document
                 if status is not None and state.status != status:
                     continue
                 if operating_unit_ref is not None and (
@@ -545,3 +560,18 @@ class FixtureErpAdapter:
 
     def ping(self) -> bool:
         return not self._outage
+
+    # -- reconciliation support (public, read-only) ---------------------------------
+
+    def known_draft_refs(self) -> set[str]:
+        """Public snapshot of every draft handle this provider issued."""
+        with self._lock:
+            return {state.draft_ref for state in self._invoices.values()}
+
+    def payment_evidence_index(self) -> tuple[tuple[str, str], ...]:
+        """Public (payment_ref, evidence_ref) pairs for orphan cross-checks."""
+        with self._lock:
+            return tuple(sorted(
+                (payment.reference, payment.evidence_ref)
+                for payment in self._payments.values()
+            ))
