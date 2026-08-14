@@ -196,7 +196,7 @@ Done when: recovery items cannot remain silently stuck and no blind reissue occu
 **Requirements:** R-005, R-006, R-007, R-008, R-016, R-017, R-019, R-021
 **Dependencies:** EVAL-002, ADP-001, FND-002, FND-003, FND-004, REC-001
 **Owned paths:** `src/adapters/erpnext/**`, `tests/integration/erpnext/**`
-**Status:** `READY`
+**Status:** `DONE`
 
 Steps:
 1. Run provider-neutral contracts against isolated ERPNext.

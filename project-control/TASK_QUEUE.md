@@ -16,7 +16,7 @@ Only dependency-satisfied, gate-authorized source tasks may be `READY`; statuses
 | UNIT-001 | R-001, R-002, R-012, R-013, R-014, R-015, R-018, R-020, R-021, R-022 | FND-001, FND-002, FND-003 | unit fixture/config paths | DONE | schema+lifecycle+rollback+no-hardcode onboarding |
 | ADP-001 | R-005, R-006, R-007, R-008, R-017 | FND-001, FND-004 | fixture adapter/contracts | DONE | network-disabled vertical slice |
 | REC-001 | R-007, R-008 | FND-004, ADP-001 | reconciliation UI/worker/tests/runbook | DONE | crash/restart/operator queue evidence |
-| ADP-002 | R-005, R-006, R-007, R-008, R-016, R-017, R-019, R-021 | EVAL-002, ADP-001, FND-002, FND-003, FND-004, REC-001 | ERPNext adapter/tests | READY | provider contracts/readback/permission |
+| ADP-002 | R-005, R-006, R-007, R-008, R-016, R-017, R-019, R-021 | EVAL-002, ADP-001, FND-002, FND-003, FND-004, REC-001 | ERPNext adapter/tests | DONE | provider contracts/readback/permission |
 | CRM-001 | R-002, R-003, R-011, R-015, R-021 | FND-002, UNIT-001, ADP-002 | CRM/adapter/tests | BACKLOG | search/export/conflict isolation |
 | ISO-001 | R-003, R-011, R-021 | EVAL-002, UNIT-001, CRM-001 | native security tests/evidence | BACKLOG | all native surfaces + ADR |
 | ISOFIX-001 | R-003, R-011, R-021 | ISO-001 | final isolation runtime/source/tests/evidence | BACKLOG | implemented final architecture + fresh ISOLATION_FINAL=PASS |

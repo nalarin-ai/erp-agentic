@@ -1,6 +1,6 @@
 # Plan Gate
 
-Baseline-ID: `DRAFT-960349ee5e3d84e2c7c2afce475eeae847bb8baeb6fae4220882a03679667068`
+Baseline-ID: `DRAFT-f7db25626ec11160827d61e44d9f84b66f2e9695db42509f076f5bba0957145e`
 VERDICT: PASS
 
 Fresh independent FND-004 QA retry (`deleg_e64fcb56`, read-only) verdict PASS: 0 CRITICAL, 0 HIGH, 0 unresolved MEDIUM on the remediated candidate; transition review pending below.
@@ -18,6 +18,7 @@ Authorized state:
 - `MIG-001`: DONE;
 - `FLOW-001`: DONE;
 - `EVAL-001`: DONE;
+- `ADP-002`: DONE;
 - no other task promoted.
 
 Evidence:
@@ -43,6 +44,8 @@ Evidence:
 - final independent QA retry round 3 (`deleg_61ffe061`): PASS_WITH_FINDINGS — R2-01 CLOSED via 16 probe forged-field independen; 1 LOW baru (FLOW-QA-R3-01 destination_account_alias tidak di forgery tuple, cosmetic-only) — ditutup via TDD (1 regression test RED-first); final suite 306/306 PASS (47 FLOW-001 focused PASS), compileall PASS, `git diff --check` PASS, plan validator PASS; local commit `820b226`;
 - EVAL-001: read-only audit via GitHub API (no clone, no credential, no live data); canonical source `frappe/erpnext` pinned to `v16.32.1` (GPL-3.0); runtime/API/permissions/localization audited; synthetic fixture and isolation/teardown defined; 6 gaps recorded (GAP-001..GAP-006); independent QA (`deleg_a941ac47`): PASS_WITH_FINDINGS — 3 LOW (F-01 implicit traceability, F-02 R-019 sharing semantic, F-03 token format cosmetic) — remediated by adding explicit requirement traceability matrix, R-019 sharing note, and token placeholder clarification; full suite 306/306 PASS, compileall PASS, `git diff --check` PASS, plan validator PASS;
 - exact plan hash `39351ae5a196dc816ad454eb8926e2e1c5d43692ef2632b37e6dae9fabd86887`;
-- exact queue hash `fd28e1a62ed9c53105b41f011fc7fc9d38a0b2beecb5e55b7a15450fdff6cec8`.
+- exact queue hash `fd28e1a62ed9c53105b41f011fc7fc9d38a0b2beecb5e55b7a15450fdff6cec8`;
+- ADP-002: TDD — seeder master-data idempotent (Company UNIT-BM, Customer CUST-ALPHA, Item SVC-ADS, UOM, Warehouse, Cost Center) via REST; 20 integration tests GREEN live vs pilot (127.0.0.1:18080); independent QA round 1 (`deleg_814d8f85`): FAIL (3 HIGH: scope-bypass read/evidence-index, draft-PE misclassified applied di reconcile, raw TimeoutError escape; 4 MEDIUM: whitespace/lowercase-currency regression, reversal semantics REV:-unreadable + double-reversal accepted, server-traceback leak di reason, unbounded re-login recursion; 4 LOW: filter f-string injection, hardcoded date/FY2026, non-canonical amount; 2 INFO) — remediated via TDD (14 regression tests RED-first): fail-closed scope checks + company-in-scope filters, docstatus=1-only reconcile, timeout wrapping, input validation, REV: readable + double-reversal DocumentRejected, `_sanitize_error_body` ≤300 chars, bounded single-retry re-login, json.dumps filters, date.today(), canonical amounts;
+- fresh independent QA retry (`deleg_1e9f985b`): PASS_WITH_FINDINGS — F-01..F-10 CLOSED via 14 probe independen, 8/8 targeted mutants KILLED; 1 new LOW (N-01 empty-scope fail-open) ditutup via TDD (test_empty_scope_fail_closed + guard `not self._scope`); 1 INFO (N-02 read_payment payload) accepted; final suite 348/348 PASS, compileall PASS, `git diff --check` PASS, plan validator PASS; local commit `a5a5b28`.
 
 Hermes may claim one dependency-ready task under a new one-writer lease. TDD and independent read-only QA remain mandatory. Production/live/official posting/banking/tax/destructive prohibitions remain unchanged.
