@@ -1,12 +1,12 @@
 # Writer Lease
 
-- Status: `CLAIMED`
-- Owner: `hermes-executor` (cron tick 2026-08-14T12:08:05Z)
-- Session/run ID: `adp-002-claim-20260814T120805Z`
+- Status: `FREE`
+- Owner: none
+- Session/run ID: `adp-002-claim-20260814T120805Z` (completed)
 - Task ID: `ADP-002` — ERPNext adapter/tests
 - Worktree: `/home/tejo/agentic/projects/erp-kreasi-hebat`
-- Owned paths: `src/adapters/erpnext/**`, `tests/integration/erpnext/**`
+- Owned paths: n/a (released)
 - Claimed at: `2026-08-14T12:08:05Z`
-- Heartbeat: `2026-08-14T12:08:05Z` (claim initiated; PLAN_GATE PASS verified; FULL_AUTO ACTIVE verified; all deps DONE)
-- Expires at: `2026-08-14T12:23:05Z` (15 min TTL)
-- Recovery basis: PLAN_GATE PASS (baseline `960349ee...`), FULL_AUTO ACTIVE (project/profile/repo/bot/identity bound), all ADP-002 deps DONE (EVAL-002, ADP-001, FND-002, FND-003, FND-004, REC-001). Task promoted from BACKLOG → READY → CLAIMED.
+- Heartbeat: `2026-08-14T12:10:00Z` (ADP-002 initial implementation committed `a737065`; ERPNext adapter + contract tests created; 306/306 PASS; compileall PASS; git diff --check PASS; plan validator PASS; lease released)
+- Expires at: n/a (released)
+- Recovery basis: ADP-002 initial implementation complete. Next tick: start ERPNext pilot environment and run integration tests against live instance, then dispatch independent QA.
