@@ -1,9 +1,9 @@
 # Plan Gate
 
-Baseline-ID: `DRAFT-6de6f10869e5204c30df02b3ffcf2782a8347ea6af7213813a98f442915c2cda`
+Baseline-ID: `DRAFT-6cf893179f7d65d81e3272c039432a14d029ce9352c300b71167daf7f327bba0`
 VERDICT: PASS
 
-Fresh independent FLOW-002 QA retry round 2 (`deleg_f60edd61`, read-only) verdict PASS_WITH_FINDINGS: all round-1 findings F-01..F-12 CLOSED via 42 fresh probes; 6/8 mutants killed by suite; 2 surviving raw-exception mutants (N-01, LOW) closed via 3 stub-adapter regression tests RED-first (mutants re-hunted in /tmp copy: 3/3 KILLED); N-02 reviewer-assignment-revision informational, accepted. Final suite 451/451 PASS.
+Fresh independent FLOW-003 QA round 3 final (`deleg_f06542a4`, read-only) verdict PASS, zero findings: semua closure round-1/round-2/2.5 terverifikasi via probe independen baru (reconcile authz deny+audit, replay-after-PAID recorded+fresh status, M6/M7/M9 workflow guards, read-back orphan → reconciliation enqueue, ABSENT cross-unit tetap UNCERTAIN tanpa disclosure, early-deny audited, anchor deterministik PYTHONHASHSEED=0 stabil 3x); 12 probe adversarial baru PASS (zero/negative amount, exact open_amount boundary, concurrent record+reconcile race, PRESENT cross-unit, reconcile replay idempotency, aging sum invariant, dll.); mutation spot-check 5/5 KILLED; Done-when evidenced: balances reconcile dari provider read-back dan chat text saja tidak dapat mengonfirmasi payment. Focused suite 55/55 PASS; full suite 506/506 kecuali 1 pre-existing CRM-001 state-dependent fixture defect (`test_export_is_scope_bounded_with_evidence`, terkonfirmasi gagal di clean tree tanpa kandidat FLOW-003 via git stash; di luar owned paths; backlog teknis tercatat di STATUS.md).
 
 Authorized state:
 
@@ -21,6 +21,7 @@ Authorized state:
 - `ADP-002`: DONE;
 - `CRM-001`: DONE;
 - `FLOW-002`: DONE;
+- `FLOW-003`: DONE;
 - no other task promoted.
 
 Evidence:
@@ -55,3 +56,7 @@ Evidence:
 - fresh independent QA retry round 2 (`deleg_f60edd61`): PASS_WITH_FINDINGS — F-01..F-12 CLOSED via 42 fresh probes (8 forged-field, self-post, repost-block, stale-reconcile, due_on, outage-wrap, orphan-cancel, channel-mismatch, assignment_ref, provider_draft_ref), 6/8 mutants killed oleh suite; 2 surviving raw-exception mutants (N-01 LOW) ditutup via TDD 3 stub-adapter regression tests (mutants re-hunted di /tmp copy: 3/3 KILLED); N-02 LOW informational (reviewer assignment revision tidak di-pin antara preview dan post) accepted; probes adversarial baru PASS: post-after-draft-cancel zero provider writes, delivery-after-cancel blocked, concurrent posts dua thread exactly-one-POSTED, double cancel blocked, forged config_version=0 blocked, still-uncertain reconcile → UNCERTAIN; final suite 451/451 PASS (49 FLOW-002 focused PASS), compileall PASS, `git diff --check` PASS, plan validator PASS baseline `6de6f108`.
 
 Hermes may claim one dependency-ready task under a new one-writer lease. TDD and independent read-only QA remain mandatory. Production/live/official posting/banking/tax/destructive prohibitions remain unchanged.
+- FLOW-003: TDD — RED (ModuleNotFoundError) → GREEN 38/38; independent QA round 1 (`deleg_58124787`): PASS_WITH_FINDINGS (1 HIGH-mitigated: reconcile_payment tanpa authz; 2 MEDIUM: claim-replay ordering, 3 surviving mutants M6/M7/M9) — remediated via TDD (11 regression tests RED-first): reconcile `_authorize(PAYMENT_RECORD)` + scope, existing-claim check sebelum overpay guard + fresh status re-read, 3 stub-adapter tests membunuh M6/M7/M9 (re-hunt 3/3 KILLED);
+- fresh independent QA retry round 2 (`deleg_5fd55237`): PASS_WITH_FINDINGS — F-01/F-02 CLOSED, mutants 3/3 KILLED; 2 MEDIUM baru (read-back orphan claim tanpa linkage/enqueue; ABSENT reconcile cross-unit tanpa scope filter) + 1 LOW (early-deny tanpa audit) — remediated via TDD (read-back failure/mismatch → full linkage + `_pending_uncertain` + enqueue + audit + blind-retry blocked; ABSENT path scope-filtered, foreign claim tetap UNCERTAIN tanpa disclosure; denial audit di early-deny paths);
+- flaky `TestReconcileAbsentScope` didiagnosis root cause: hash-order-dependent unit anchoring di reconcile — diperbaiki deterministik (anchor dari claim/evidence yang direkonsiliasi); stabil 10x isolated + 5x focused + PYTHONHASHSEED=0;
+- final independent QA round 3 (`deleg_f06542a4`): PASS zero findings — semua closure diverifikasi via probe independen, 12 probe adversarial baru PASS, mutation spot-check 5/5 KILLED, Done-when evidenced (balances reconcile dari read-back; chat-only tidak mengonfirmasi payment); focused 55/55 PASS (stabil 3x + hash-seed pinned); compileall PASS; `git diff --check` PASS; plan validator PASS baseline `6cf89317`.

@@ -69,7 +69,7 @@ EXPECTED_STATUS = {
     "FND-001": "DONE", "FND-002": "DONE", "FND-003": "DONE", "FND-004": "DONE",
     "UNIT-001": "DONE", "ADP-001": "DONE", "REC-001": "DONE", "ADP-002": "DONE",
     "CRM-001": "DONE", "ISO-001": "BACKLOG", "ISOFIX-001": "BACKLOG",
-    "FLOW-001": "DONE", "FLOW-002": "DONE", "FLOW-003": "READY",
+    "FLOW-001": "DONE", "FLOW-002": "DONE", "FLOW-003": "DONE",
     "REM-001": "BACKLOG_POST_MVP", "RPT-001": "BACKLOG", "UX-001": "BACKLOG",
     "MIG-001": "DONE", "MIGSRC-001": "BLOCKED_OWNER_INPUT", "OPS-001": "BACKLOG",
     "PILOT-001": "BACKLOG", "INT-001": "BACKLOG_POST_MVP",
@@ -214,8 +214,8 @@ def validate_types(data: dict, types: dict[str, type], prefix: str, failures: li
 TASK_ID = r"[A-Z]+-[0-9]{3}"
 DEP_VALUE = re.compile(rf"^(?:none|{TASK_ID}(?:, {TASK_ID})*)$")
 EXPECTED_MACHINE_FILE_SHA256 = {
-    "EXECUTION_PLAN.md": "f56759d985a28f1f6d688c08652cf151ff30a0b1e3a65ecc90bb39e89fbec072",
-    "TASK_QUEUE.md": "542cfca26217aa2f93282b32d4e24271a9ffee978c2a65dc6a7239c48252b0a6",
+    "EXECUTION_PLAN.md": "bc75d423bfaef21bb682951527b652bf3b4808b8a4b24668c22d19e4b9d1a442",
+    "TASK_QUEUE.md": "1cb5ce48bcc7423f3669db4f1f58fec66d9bdb94641bbcb789472b24914f1795",
 }
 
 

@@ -286,7 +286,7 @@ Done when: official number exists only after verified post and delivery remains 
 **Requirements:** R-006, R-007, R-008, R-013, R-017, R-019
 **Dependencies:** FLOW-002
 **Owned paths:** `src/workflows/payments/**`, `src/reports/receivables/**`, `tests/workflows/payments/**`
-**Status:** `READY`
+**Status:** `DONE`
 
 Steps:
 1. Test partial/full/overpay, wrong account/ledger, duplicates, races, and denied actions.
