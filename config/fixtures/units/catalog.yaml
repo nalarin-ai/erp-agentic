@@ -1,0 +1,44 @@
+# Unit fixture catalog — synthetic, credential-free.
+#
+# Normative source for UNIT-001 onboarding (R-001/R-002/R-012..R-015/R-018).
+# Opaque IDs and aliases only; never raw account numbers or secrets.
+# Balonesia is onboarded here as data — no unit-specific source branches.
+#
+# Schema (per row): code, display_name, account_alias, issues_ppn,
+# service_categories (comma-separated, allowlisted per business decision).
+
+units:
+  - code: BANYUMEDIA
+    display_name: Banyumedia
+    account_alias: acct_banyumedia
+    issues_ppn: false
+    service_categories: [google_ads, digital_marketing, seo]
+  - code: PR1ME
+    display_name: Pr1me
+    account_alias: acct_pr1me
+    issues_ppn: false
+    service_categories: [event_organizer, equipment_rental]
+  - code: CONTRACTOR
+    display_name: Kontraktor
+    account_alias: acct_contractor
+    issues_ppn: false
+    service_categories: [paving_block, asphalt, house_construction]
+    shared_with: [HEAVY_EQUIPMENT]
+  - code: HEAVY_EQUIPMENT
+    display_name: Persewaan Alat Berat
+    # Business rule: Heavy Equipment shares the Contractor account alias.
+    account_alias: acct_contractor
+    issues_ppn: false
+    service_categories: [heavy_equipment_rental]
+    shared_with: [CONTRACTOR]
+  - code: PT_TKH_OPS
+    display_name: PT Tumbuh Kreasi Hebat
+    account_alias: acct_pt_tkh
+    # Sole PPN-issuing entity for PPN-bearing transactions.
+    issues_ppn: true
+    service_categories: [corporate_services]
+  - code: BALONESIA
+    display_name: Balonesia
+    account_alias: acct_balonesia
+    issues_ppn: false
+    service_categories: [promotional_balloons]

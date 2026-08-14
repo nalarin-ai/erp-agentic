@@ -151,7 +151,7 @@ Done when: one provider action is evidenced under tested races and audit fails c
 **Requirements:** R-001, R-002, R-012, R-013, R-014, R-015, R-018, R-020, R-021, R-022
 **Dependencies:** FND-001, FND-002, FND-003
 **Owned paths:** `src/units/**`, `config/fixtures/units/**`, `tests/units/**`
-**Status:** `READY`
+**Status:** `DONE`
 
 Steps:
 1. Define and test the typed allowlisted unit-setting schema, monotonic version/CAS and non-overlapping effective-interval lifecycle, all confirmed units, service categories, assignments, branding, and shared-account mapping.
