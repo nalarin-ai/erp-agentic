@@ -7,7 +7,7 @@
 - Current task: none claimed post-transition (lease released after commit)
 - Completed tasks: `FND-001`, `FND-002`, `FND-003`, `FND-004`, `UNIT-001`, `ADP-001`, `REC-001`, `MIG-001`, `FLOW-001`, `EVAL-001`
 - Ready tasks: none — `EVAL-002` requires isolated ERPNext environment (Docker/bench, synthetic secrets, network); `EVAL-003` optional comparator; all FLOW/CRM/RPT/UX tasks require `ADP-002` which requires `EVAL-002`
-- Trusted implementation base: pending commit (EVAL-001 artifacts)
+- Trusted implementation base: `c300ccb` (commit EVAL-001 kontrol)
 - Completion baseline: `960349ee5e3d84e2c7c2afce475eeae847bb8baeb6fae4220882a03679667068`
 - Progress: tick ini (1) claim lease baru `eval-001-claim-20260814T114500Z` setelah PLAN_GATE PASS + FULL_AUTO ACTIVE diverifikasi; (2) EVAL-001 — read-only audit via GitHub API (no clone, no credential, no live data); canonical source `frappe/erpnext` pinned to `v16.32.1` (GPL-3.0); runtime/API/permissions/localization audited; synthetic fixture and isolation/teardown defined; 6 gaps recorded (GAP-001..GAP-006); (3) independent QA (`deleg_a941ac47`): PASS_WITH_FINDINGS — 3 LOW (F-01 implicit traceability, F-02 R-019 sharing semantic, F-03 token format cosmetic) — remediated by adding explicit requirement traceability matrix, R-019 sharing note, and token placeholder clarification; (4) full suite 306/306 PASS, compileall PASS, git diff --check PASS, plan validator PASS; (5) committed; lease released.
 - Active technical findings: none; FLOW-QA-01..10, FLOW-QA-R2-01, FLOW-QA-R3-01, EVAL-QA-F-01..F-03 semuanya CLOSED.
