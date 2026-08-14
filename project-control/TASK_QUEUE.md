@@ -6,7 +6,7 @@ Only dependency-satisfied, gate-authorized source tasks may be `READY`; statuses
 |---|---|---|---|---|---|
 | SEC-001 | R-005, R-007, R-008 | none | executor gateway | DONE | bound active policy + safety prohibitions |
 | PLAN-001 | R-001..R-022 | SEC-001 | control/plans/validator only | DONE | Pass 1/2 revisions + fresh Pass 3 + structural gate |
-| EVAL-001 | R-005, R-006, R-009, R-016, R-017, R-019 | PLAN-001 | ERPNext evaluation/evidence | BACKLOG | pinned source/license/capability audit |
+| EVAL-001 | R-005, R-006, R-009, R-016, R-017, R-019 | PLAN-001 | ERPNext evaluation/evidence | DONE | pinned source/license/capability audit |
 | EVAL-002 | R-005, R-006, R-009, R-016 | EVAL-001 | ERPNext environment/scripts/evidence | BACKLOG | health + reproducible restore |
 | EVAL-003 | R-005, R-006, R-009 | PLAN-001 | isolated comparator/evidence | BACKLOG_OPTIONAL | identical synthetic rubric |
 | FND-001 | R-004, R-005, R-006, R-007, R-008, R-017, R-019 | PLAN-001 | domain/contracts/unit tests | DONE | type/money/financial identity/redaction |

@@ -17,6 +17,7 @@ Authorized state:
 - `REC-001`: DONE;
 - `MIG-001`: DONE;
 - `FLOW-001`: DONE;
+- `EVAL-001`: DONE;
 - no other task promoted.
 
 Evidence:
@@ -40,6 +41,7 @@ Evidence:
 - FLOW-001: TDD — RED 19/19 (ModuleNotFoundError) → GREEN 19/19; independent QA round 1 (`deleg_688a5d70`): FAIL (1 CRITICAL idempotency-before-authz, 3 HIGH: no re-authz on set_lines/cancel, render_for_review tanpa authz, get_draft mutable state; 4 MEDIUM: currency tidak divalidasi vs unit + tidak di hash, description tidak di hash, KeyError pada template hilang, denial path tanpa audit; 2 LOW: pinned revision default mati, non-monotonic timestamps) — remediated via TDD (19 regression tests RED-first): authz-before-idempotency + per-actor key scoping + payload-conflict detection; re-authz pada setiap mutasi; render actor-scoped; DraftSnapshot immutable (MappingProxyType); currency-vs-unit + mixed-currency fail-closed; currency+description di hash material; safe WorkflowBlocked pada template hilang; denial audit di semua entry point; pinned-revision default; monotonic clock guard;
 - fresh independent QA retry round 2 (`deleg_95479455`): PASS_WITH_FINDINGS — semua 10 finding round-1 CLOSED via probe independen + 16-mutant hunt (15 KILLED, 1 benign SURVIVOR M15 pinned-revision redundan dengan PreviewBinding); 1 MEDIUM baru (FLOW-QA-R2-01 forged Preview di render) — remediated via TDD (6 regression tests RED-first): render_for_review recompute preview_hash + bandingkan seluruh protected fields, PREVIEW_HASH_MISMATCH audited; R2-M1/R2-M2 mutants KILLED;
 - final independent QA retry round 3 (`deleg_61ffe061`): PASS_WITH_FINDINGS — R2-01 CLOSED via 16 probe forged-field independen; 1 LOW baru (FLOW-QA-R3-01 destination_account_alias tidak di forgery tuple, cosmetic-only) — ditutup via TDD (1 regression test RED-first); final suite 306/306 PASS (47 FLOW-001 focused PASS), compileall PASS, `git diff --check` PASS, plan validator PASS; local commit `820b226`;
+- EVAL-001: read-only audit via GitHub API (no clone, no credential, no live data); canonical source `frappe/erpnext` pinned to `v16.32.1` (GPL-3.0); runtime/API/permissions/localization audited; synthetic fixture and isolation/teardown defined; 6 gaps recorded (GAP-001..GAP-006); independent QA (`deleg_a941ac47`): PASS_WITH_FINDINGS — 3 LOW (F-01 implicit traceability, F-02 R-019 sharing semantic, F-03 token format cosmetic) — remediated by adding explicit requirement traceability matrix, R-019 sharing note, and token placeholder clarification; full suite 306/306 PASS, compileall PASS, `git diff --check` PASS, plan validator PASS;
 - exact plan hash `39351ae5a196dc816ad454eb8926e2e1c5d43692ef2632b37e6dae9fabd86887`;
 - exact queue hash `fd28e1a62ed9c53105b41f011fc7fc9d38a0b2beecb5e55b7a15450fdff6cec8`.
 
