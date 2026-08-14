@@ -1,9 +1,9 @@
 # Plan Gate
 
-Baseline-ID: `DRAFT-f7db25626ec11160827d61e44d9f84b66f2e9695db42509f076f5bba0957145e`
+Baseline-ID: `DRAFT-55aa516a1ed319fbcf4577971e6614f2c03c14edff06a9b6314274741bd9c0e8`
 VERDICT: PASS
 
-Fresh independent FND-004 QA retry (`deleg_e64fcb56`, read-only) verdict PASS: 0 CRITICAL, 0 HIGH, 0 unresolved MEDIUM on the remediated candidate; transition review pending below.
+Fresh independent CRM-001 QA retry (`deleg_c0903140`, read-only) verdict PASS: 0 CRITICAL, 0 HIGH, 0 unresolved MEDIUM/LOW on the remediated candidate; 5/5 mutants killed; 9 fresh adversarial probes pass.
 
 Authorized state:
 
@@ -19,6 +19,7 @@ Authorized state:
 - `FLOW-001`: DONE;
 - `EVAL-001`: DONE;
 - `ADP-002`: DONE;
+- `CRM-001`: DONE;
 - no other task promoted.
 
 Evidence:
@@ -47,5 +48,7 @@ Evidence:
 - exact queue hash `fd28e1a62ed9c53105b41f011fc7fc9d38a0b2beecb5e55b7a15450fdff6cec8`;
 - ADP-002: TDD — seeder master-data idempotent (Company UNIT-BM, Customer CUST-ALPHA, Item SVC-ADS, UOM, Warehouse, Cost Center) via REST; 20 integration tests GREEN live vs pilot (127.0.0.1:18080); independent QA round 1 (`deleg_814d8f85`): FAIL (3 HIGH: scope-bypass read/evidence-index, draft-PE misclassified applied di reconcile, raw TimeoutError escape; 4 MEDIUM: whitespace/lowercase-currency regression, reversal semantics REV:-unreadable + double-reversal accepted, server-traceback leak di reason, unbounded re-login recursion; 4 LOW: filter f-string injection, hardcoded date/FY2026, non-canonical amount; 2 INFO) — remediated via TDD (14 regression tests RED-first): fail-closed scope checks + company-in-scope filters, docstatus=1-only reconcile, timeout wrapping, input validation, REV: readable + double-reversal DocumentRejected, `_sanitize_error_body` ≤300 chars, bounded single-retry re-login, json.dumps filters, date.today(), canonical amounts;
 - fresh independent QA retry (`deleg_1e9f985b`): PASS_WITH_FINDINGS — F-01..F-10 CLOSED via 14 probe independen, 8/8 targeted mutants KILLED; 1 new LOW (N-01 empty-scope fail-open) ditutup via TDD (test_empty_scope_fail_closed + guard `not self._scope`); 1 INFO (N-02 read_payment payload) accepted; final suite 348/348 PASS, compileall PASS, `git diff --check` PASS, plan validator PASS; local commit `a5a5b28`.
+- CRM-001 slice 2 (ERPNext CRM adapter): TDD — RED 19/19 integration tests fail (ModuleNotFoundError) → GREEN 19/19 live vs pilot (127.0.0.1:18080) + seeder idempotency 1/1; independent QA round 1 (`deleg_1f1f4466`): FAIL (3 HIGH: F-001 archived-lead masuk status=NEW search, F-002 quotation status filter silently dropped, F-003 customer_ref tidak round-trip (ERPNext overwrite customer_name dari party); 2 MEDIUM: F-004 state-dependent scope test (>50 leads), F-005 unmapped quotation statuses keluar vocab kontrak; 2 LOW: F-006 transfer read-then-write non-atomic (diterima, didokumentasikan), F-007 count-fallback over-report (kosmetik)) — remediated via TDD (4 regression tests RED-first): exclusion filter custom_archived!=1 pada status NEW, per-doctype quotation status mapping + CrmDenied pada status tak dikenal, custom field `custom_crm_customer_ref` untuk round-trip opaque ref, `_map_quotation_status` fail-closed (docstatus 0 → DRAFT; unknown → EXPIRED), test F-004 dibuat state-independent via per-run uuid marker;
+- fresh independent QA retry (`deleg_c0903140`): PASS — F-001..F-005 CLOSED via probe live independen, 5/5 mutants KILLED (M1 archived-exclusion, M2 quotation-status-filter, M3 customer_ref field, M4 conflict company filter, M5 status verbatim), 9 fresh adversarial probes PASS (cross-unit transfer scope-move penuh, export max_rows=0 CrmDenied + evidence echo + zero cross-unit refs, cursor out-of-range empty page + cross-scope CrmDenied, seeder idempotent all-False); final suite 402/402 PASS, compileall PASS, `git diff --check` PASS, plan validator PASS.
 
 Hermes may claim one dependency-ready task under a new one-writer lease. TDD and independent read-only QA remain mandatory. Production/live/official posting/banking/tax/destructive prohibitions remain unchanged.

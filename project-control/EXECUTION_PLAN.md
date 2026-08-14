@@ -211,7 +211,7 @@ Done when: ERPNext passes fixture contracts and verified outcome invariants.
 **Requirements:** R-002, R-003, R-011, R-015, R-021
 **Dependencies:** FND-002, UNIT-001, ADP-002
 **Owned paths:** `src/crm/**`, `src/adapters/erpnext_crm/**`, `tests/crm/**`
-**Status:** `BACKLOG`
+**Status:** `DONE`
 
 Steps:
 1. Define lead/opportunity/customer/quotation/search/export/conflict ports.

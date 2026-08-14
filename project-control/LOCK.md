@@ -1,7 +1,10 @@
 # Writer Lease
 
-- Status: `FREE`
-- Last owner: hermes-executor (cron tick 2026-08-14T14:17Z)
-- Last task: `CRM-001` — in progress, slice committed (`da23867`): CRM port contracts + fixture adapter + unit isolation proven (378/378 PASS; QA PASS_WITH_FINDINGS remediated). **Remaining untuk CRM-001 DONE:** adapter ERPNext CRM nyata (`src/adapters/erpnext_crm/**`) menjalankan contract suite yang sama vs pilot + fresh QA final + transition review.
-- Released at: `2026-08-14T14:50:00Z`
-- Recovery basis: HEAD `da23867` = trusted implementation base. Contract suite CRM siap di-bind ke adapter ERPNext: `tests/crm/test_fixture_crm.py` (mixin-style reusable pattern), `src/crm/port.py`. Ikuti pola ADP-002: ERPNext doctype Lead/Quotation/Customer, scope=company, seeder bila perlu.
+- Status: `CLAIMED`
+- Owner: hermes-executor (cron tick 2026-08-14T14:30Z)
+- Claimed task: `CRM-001` — slice 2: ERPNext CRM adapter + integration tests vs pilot + fresh QA + transition
+- Claimed at: `2026-08-14T14:30:00Z`
+- Heartbeat: `2026-08-14T14:52:00Z`
+- Pre-claim state: PLAN_GATE PASS (baseline `f7db2562`), 378/378 PASS, HEAD `48dc523`.
+- Progress: TDD RED (19 tests, ModuleNotFoundError) → adapter + seeder GREEN (19/19+1) → full gates 398/398 → independent QA (`deleg_1f1f4466`) FAIL (3 HIGH: F-001 archived-in-NEW search, F-002 quotation status filter silently dropped, F-003 customer_ref no round-trip; 2 MEDIUM: F-004 state-dependent test, F-005 unmapped quotation statuses; 2 LOW: F-006 transfer non-atomic documented, F-007 count fallback) → remediasi TDD 4 regression tests RED-first (archived-vs-NEW, quotation status filter, customer_ref round-trip via new custom field `custom_crm_customer_ref`, status mapping fail-closed) + F-004 unique-marker test fix → 24/24 erpnext_crm PASS, full suite 402/402 PASS, compileall PASS, diff --check PASS, validator PASS.
+- Next: fresh QA retry, then transition review + commit.
