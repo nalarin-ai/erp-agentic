@@ -1,12 +1,12 @@
 # Writer Lease
 
-- Status: `FREE`
-- Owner: none
-- Session/run ID: `mig-001-claim-20260814T100100Z` (completed)
-- Task ID: `MIG-001` — DONE at commit `b88c1bf`
+- Status: `CLAIMED`
+- Owner: hermes-executor
+- Session/run ID: `flow-001-claim-20260814T103000Z`
+- Task ID: `FLOW-001` — chat invoice draft and preview
 - Worktree: `/home/tejo/agentic/projects/erp-kreasi-hebat`
-- Owned paths: `src/imports/**`, `tests/imports/**`
-- Claimed at: `2026-08-14T10:01:00Z`
-- Heartbeat: `2026-08-14T10:12:00Z` (MIG-001 DONE: independent QA PASS_WITH_FINDINGS→remediated (MIG-QA-01/02 TDD, MIG-QA-03 documented), 258/258 PASS, 7/7 mutants killed, validator PASS baseline `960349ee`, committed `b88c1bf`; lease released)
-- Expires at: n/a (released)
-- Recovery basis: REC-001 selesai penuh (commit `b38df4a`+`785b9be`). MIG-001 READY: deps FND-001/ADP-001 DONE; owned paths disjoint. Selesai dalam satu tick tanpa interupsi.
+- Owned paths: `src/workflows/invoice_draft/**`, `src/channels/**`, `tests/workflows/invoice_draft/**`
+- Claimed at: `2026-08-14T10:30:00Z`
+- Heartbeat: `2026-08-14T11:30:00Z` (FLOW-001 R2-01 forged-Preview remediation via TDD — 6 regression tests RED-first → GREEN; 305/305 PASS; R2-M1/M2 mutants KILLED; menunggu final independent QA retry)
+- Expires at: `2026-08-14T11:45:00Z` (diperbarui tiap heartbeat; stale bila >15 menit)
+- Recovery basis: bila lease ini stale tanpa commit, kandidat WIP harus diverifikasi ulang via full test suite sebelum dilanjutkan atau dibuang.
