@@ -10,9 +10,9 @@ Authorized state:
 - `PLAN-001`: DONE;
 - `FND-001`: DONE;
 - `FND-002`: DONE;
-- `FND-003`: READY;
+- `FND-003`: DONE;
 - `FND-004`: READY;
-- `UNIT-001`: BACKLOG because `FND-003` remains incomplete;
+- `UNIT-001`: READY (dependencies `FND-001`, `FND-002`, `FND-003` satisfied);
 - no other task promoted.
 
 Evidence:

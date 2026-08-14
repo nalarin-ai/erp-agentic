@@ -11,9 +11,9 @@ Only dependency-satisfied, gate-authorized source tasks may be `READY`; statuses
 | EVAL-003 | R-005, R-006, R-009 | PLAN-001 | isolated comparator/evidence | BACKLOG_OPTIONAL | identical synthetic rubric |
 | FND-001 | R-004, R-005, R-006, R-007, R-008, R-017, R-019 | PLAN-001 | domain/contracts/unit tests | DONE | type/money/financial identity/redaction |
 | FND-002 | R-003, R-004, R-007, R-011, R-021 | FND-001 | authz paths | DONE | assignment/context positive-negative matrix |
-| FND-003 | R-016, R-017, R-019 | FND-001 | policy paths | READY | exhaustive compatibility matrix |
+| FND-003 | R-016, R-017, R-019 | FND-001 | policy paths | DONE | exhaustive compatibility matrix + trusted issuance evidence |
 | FND-004 | R-007, R-008 | FND-001 | mutation/audit/migration/test paths | READY | concurrency/crash/durability evidence |
-| UNIT-001 | R-001, R-002, R-012, R-013, R-014, R-015, R-018, R-020, R-021, R-022 | FND-001, FND-002, FND-003 | unit fixture/config paths | BACKLOG | schema+lifecycle+rollback+no-hardcode onboarding |
+| UNIT-001 | R-001, R-002, R-012, R-013, R-014, R-015, R-018, R-020, R-021, R-022 | FND-001, FND-002, FND-003 | unit fixture/config paths | READY | schema+lifecycle+rollback+no-hardcode onboarding |
 | ADP-001 | R-005, R-006, R-007, R-008, R-017 | FND-001, FND-004 | fixture adapter/contracts | BACKLOG | network-disabled vertical slice |
 | REC-001 | R-007, R-008 | FND-004, ADP-001 | reconciliation UI/worker/tests/runbook | BACKLOG | crash/restart/operator queue evidence |
 | ADP-002 | R-005, R-006, R-007, R-008, R-016, R-017, R-019, R-021 | EVAL-002, ADP-001, FND-002, FND-003, FND-004, REC-001 | ERPNext adapter/tests | BACKLOG | provider contracts/readback/permission |
