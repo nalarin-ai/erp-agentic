@@ -249,3 +249,27 @@ Final verdict: `PASS` on source candidate `c9971565876fa8772b5c6fd4153f218e1affe
 - The transition remains non-canonical until fresh independent integrated transition review and gate promotion.
 
 Fresh independent transition reviewer `deleg_52a426a8`: `PASS` on integrated candidate `1e4ab3f5d7fe184f657989648bdd486b6d86307664d9dcc0593ae321e2226773` and validator baseline `cb9f2583e46718d83f9fe6ae24f4e27617548d30cf9f05b0fb230f305725a846`, with 0 CRITICAL, 0 HIGH, and 0 unresolved MEDIUM. The reviewer confirmed only FND-002 changed READY to DONE; FND-003/FND-004 remain READY; UNIT-001 remains BACKLOG; 22/30/30/68 structural counts, exact plan/queue hashes, 26/26 tests, 190/190 mutations, source done-when, lease release, approval boundary, and production prohibitions all PASS.
+
+## FND-004 independent code QA — round 1
+
+Reviewer: delegation `deleg_abe7c340` (read-only; `git status` byte-identical before/after; 93/93 baseline green confirmed by reviewer).
+
+Verdict: `FAIL` — 1 CRITICAL, 2 HIGH, 2 MEDIUM, 4 LOW.
+
+| ID | Sev | Finding | Closure (revision by Hermes, TDD) | Status |
+|---|---|---|---|---|
+| FND004-QA-01 | CRITICAL | Retry of in-flight PENDING claim re-invoked provider (blind replay) | `MutationOutcome.created` flag; executor raises `RecoveryRequired` on existing non-terminal claim; tests `test_pending_retry_does_not_invoke_provider`, `test_uncertain_retry_does_not_invoke_provider`; mutant killed | RESOLVED |
+| FND004-QA-02 | HIGH | Durable reclaim: no fencing takeover, stale owner never rejected durably, dead branch | Durable claim rewrite: CLAIM_HELD for owner re-claim, expiry-gated transactional takeover updating fencing/lease, STALE_FENCING for lower token or premature higher token, `register_fencing` no-op shim; tests `test_takeover_after_expiry_updates_fencing_and_rejects_stale`, `test_non_terminal_reclaim_returns_distinct_status`, `test_lower_token_rejected_*`, `test_higher_token_rejected_while_stored_lease_live`; mutants killed | RESOLVED |
+| FND004-QA-03 | HIGH | Success-audit failure contradicted store (RESOLVED_PRESENT vs `local_write_failed` audit) | Separated try blocks; success-audit failure transitions outcome to UNCERTAIN and audits `terminal_audit_failed`; test `test_success_audit_failure_marks_uncertain_consistently`; mutant killed | RESOLVED |
+| FND004-QA-04 | MEDIUM | Durable `audit_event` table unwired | Deferred to REC-001 (durable worker/operator queue owns append-only writer + export); recorded as task note in PLAN_REVIEW; DDL retained as forward-compatible schema | ACCEPTED_DEFERRED_REC_001 |
+| FND004-QA-05 | MEDIUM | Executor did not bind IdempotencyKey; no canonicalization version on in-memory path | `execute(namespace=..., canonicalization_version=...)` derives key and fails closed on mismatch; tests `test_mismatched_key_fails_closed`, `test_matching_key_executes_once`; mutant killed | RESOLVED |
+| FND004-QA-06 | LOW | Dead ALREADY_RESOLVED branch | Removed via rewrite; both branches now carry distinct semantics and are test-covered | RESOLVED |
+| FND004-QA-07 | LOW | In-memory store claimed thread-safe without locking | `threading.Lock` on claim critical section; `test_claim_critical_section_uses_lock`, `test_concurrent_same_key_claim_single_creator` (32-thread barrier); lock-removal mutant killed | RESOLVED |
+| FND004-QA-08 | LOW | Process-global fencing counter | Documented as fixture limitation; durable store binds fencing per-key transactionally | ACCEPTED_FIXTURE_LIMIT |
+| FND004-QA-09 | LOW | Credential-prefix check cosmetic | Accepted: derived keys are always `sha256:`-hex; guard covers hand-constructed keys only | ACCEPTED_FIXTURE_LIMIT |
+
+Additional defect found and fixed during survivor closure: re-claim of a freshly-created PENDING row returned `created=True` to non-creator callers (32-thread reproducer) — fixed by normalizing `created=False` on existing-row return; regression test added.
+
+Revision evidence: 107/107 unittest PASS; compileall PASS; `git diff --check` PASS; plan-gate validator PASS (22 requirements, 30/30 tasks, DAG, owned paths, approval boundary, no secrets); official validator mutation suite 190/190 killed; FND-004 targeted adversarial mutants 15/15 killed (including both initial survivors).
+
+QA retry: fresh independent read-only reviewer `deleg_e64fcb56` — verdict `PASS`. All RESOLVED rows verified closed; deferral/acceptance notes confirmed; no new findings; 5/5 fresh adversarial mutants killed; probe A (PENDING retry, zero provider calls) and probe B2 (stale worker after durable takeover rejected, fencing never regresses) PASS; reviewer git status byte-identical before/after; helper scripts confined to /tmp.
