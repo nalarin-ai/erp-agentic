@@ -1,6 +1,6 @@
 # Plan Gate
 
-Baseline-ID: `DRAFT-bc8b64a2cb1ab53b1dbe40ab4270a5dfa9668f11e2d006913c53d78200119a78`
+Baseline-ID: `DRAFT-960349ee5e3d84e2c7c2afce475eeae847bb8baeb6fae4220882a03679667068`
 VERDICT: PASS
 
 Fresh independent FND-004 QA retry (`deleg_e64fcb56`, read-only) verdict PASS: 0 CRITICAL, 0 HIGH, 0 unresolved MEDIUM on the remediated candidate; transition review pending below.
@@ -15,7 +15,8 @@ Authorized state:
 - `UNIT-001`: DONE;
 - `ADP-001`: DONE;
 - `REC-001`: DONE;
-- `MIG-001`: READY (dependencies `FND-001`, `ADP-001` satisfied);
+- `MIG-001`: DONE;
+- `FLOW-001`: READY (dependencies `FND-002`, `FND-003`, `ADP-001`, `UNIT-001` satisfied);
 - no other task promoted.
 
 Evidence:
@@ -35,7 +36,8 @@ Evidence:
 - fresh independent QA retry (`deleg_1de07fd8`): PASS, ADP-QA-01..08 verified CLOSED via probes, 7/7 fresh mutants killed (1 benign lock-removal survivor under GIL); 2 new LOW (ADP-QA-09 EVI-REV namespace reservation, ADP-QA-10 payment-path UncertainOutcome ref leak) closed via TDD (3 regression tests RED-first); final suite 206/206 PASS (47 erp_port contract tests), compileall PASS, `git diff --check` PASS;
 - REC-001: inherited from interrupted tick (stale lease reclaimed); candidate verified 236/236 PASS pre-mutation; independent QA round 3 (`deleg_779a5292`): PASS_WITH_FINDINGS (2 MEDIUM: F-01 no audit-chain emission, F-02 no restart-replay test; 3 LOW: F-03 SLA field, F-04 concrete adapter typing, F-05 process-global sequence) — remediated via TDD (6 RED-first regression tests; audit emission on all queue transitions; transition_log + OperatorQueue.replay; enqueued_at/updated_at + overdue_items; engine typed to ErpPort with reconciliation read-back added to the port contract; per-instance sequence); 5/5 remediation mutants killed (M3 survivor closed by terminal-overdue test strengthening);
 - fresh independent QA retry (`deleg_52aaf0b2`): PASS, F-01..F-05 verified CLOSED via independent probes, 242/242 PASS, 47/47 erp_port contract PASS; 1 new LOW (REC-QA-R3-F-01 replay by_intent idempotency untested) closed via TDD — M2 mutant now killed; final suite 242/242 PASS, compileall PASS, `git diff --check` PASS, plan validator PASS; local commit `b38df4a`;
-- exact plan hash `1c15394a1b1fd961f20cafe0c3fb6805c71f32e77df42b270ff2b01441ecacd5`;
-- exact queue hash `3fe0c4fbcb3033a583af468e71b5dc4d15e3a1d0449ec9658e69d11aa23e72ae`.
+- MIG-001: TDD — RED (ModuleNotFoundError) → GREEN 9/9, slice-2 RED 3-error → GREEN 16/16; independent QA (`deleg_2efb3ee3`): PASS_WITH_FINDINGS (2 LOW: MIG-QA-01 whitespace-formula untested survivor, MIG-QA-02 zip entry filename traversal unchecked; 3 INFO) — remediated via TDD (whitespace-formula regression test, zip filename traversal guard) + docstring deferral note (MIG-QA-03 TTL/purge → persistent-evidence lane); 7/7 targeted mutants killed (incl. QA probes: ws-formula-bypass, zip-traversal, no-byte-limit, no-dedupe, destructive-reversal, error-leak, multi-entry-zip); final suite 258/258 PASS, compileall PASS, `git diff --check` PASS; local commit `b88c1bf`;
+- exact plan hash `39351ae5a196dc816ad454eb8926e2e1c5d43692ef2632b37e6dae9fabd86887`;
+- exact queue hash `fd28e1a62ed9c53105b41f011fc7fc9d38a0b2beecb5e55b7a15450fdff6cec8`.
 
 Hermes may claim one dependency-ready task under a new one-writer lease. TDD and independent read-only QA remain mandatory. Production/live/official posting/banking/tax/destructive prohibitions remain unchanged.

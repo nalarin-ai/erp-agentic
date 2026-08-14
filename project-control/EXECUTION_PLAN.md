@@ -256,7 +256,7 @@ Done when: the actually implemented final architecture - not merely a rejected o
 **Requirements:** R-003, R-004, R-006, R-007, R-011, R-016, R-017, R-019, R-020, R-021, R-022
 **Dependencies:** FND-002, FND-003, ADP-001, UNIT-001
 **Owned paths:** `src/workflows/invoice_draft/**`, `src/channels/**`, `tests/workflows/invoice_draft/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Test missing/ambiguous/denied/cancel/edit/stale states plus multi-unit selection, revoked assignment, and configuration-version conflict.
@@ -346,7 +346,7 @@ Done when: UX evidence matrix and independent review pass.
 **Requirements:** R-005, R-008
 **Dependencies:** FND-001, ADP-001
 **Owned paths:** `src/imports/**`, `tests/imports/**`
-**Status:** `READY`
+**Status:** `DONE`
 
 Steps:
 1. Test hostile/synthetic CSV/XLSX with strict format/size/row/decompression limits.

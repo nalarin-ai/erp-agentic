@@ -20,13 +20,13 @@ Only dependency-satisfied, gate-authorized source tasks may be `READY`; statuses
 | CRM-001 | R-002, R-003, R-011, R-015, R-021 | FND-002, UNIT-001, ADP-002 | CRM/adapter/tests | BACKLOG | search/export/conflict isolation |
 | ISO-001 | R-003, R-011, R-021 | EVAL-002, UNIT-001, CRM-001 | native security tests/evidence | BACKLOG | all native surfaces + ADR |
 | ISOFIX-001 | R-003, R-011, R-021 | ISO-001 | final isolation runtime/source/tests/evidence | BACKLOG | implemented final architecture + fresh ISOLATION_FINAL=PASS |
-| FLOW-001 | R-003, R-004, R-006, R-007, R-011, R-016, R-017, R-019, R-020, R-021, R-022 | FND-002, FND-003, ADP-001, UNIT-001 | invoice draft/channel/tests | BACKLOG | unit/config state transcripts + zero writes |
+| FLOW-001 | R-003, R-004, R-006, R-007, R-011, R-016, R-017, R-019, R-020, R-021, R-022 | FND-002, FND-003, ADP-001, UNIT-001 | invoice draft/channel/tests | READY | unit/config state transcripts + zero writes |
 | FLOW-002 | R-004, R-005, R-006, R-007, R-008, R-016, R-017, R-019, R-020, R-021, R-022 | FLOW-001, ADP-002, REC-001 | invoice post/tests | BACKLOG | immutable branding/config snapshot + verified post |
 | FLOW-003 | R-006, R-007, R-008, R-013, R-017, R-019 | FLOW-002 | payment/receivable/tests | BACKLOG | balances/evidence/privacy |
 | REM-001 | R-006, R-007, R-011, R-021 | FLOW-003, FND-002 | reminders/tests | BACKLOG_POST_MVP | schedule/dedupe/privacy/failure |
 | RPT-001 | R-001, R-011, R-021 | FND-002, FLOW-003 | owner report UI/service/tests | BACKLOG | reconciled aggregation/no leakage |
 | UX-001 | R-004, R-006, R-007, R-011, R-020, R-021, R-022 | FLOW-001, FLOW-002, FLOW-003 | bounded UI/test/evidence paths | BACKLOG | responsive/keyboard/config lifecycle/independent review |
-| MIG-001 | R-005, R-008 | FND-001, ADP-001 | import/test paths | READY | hostile fixtures + dry-run/reconcile |
+| MIG-001 | R-005, R-008 | FND-001, ADP-001 | import/test paths | DONE | hostile fixtures + dry-run/reconcile |
 | MIGSRC-001 | R-005, R-008 | MIG-001, ADP-002 | migration profile/maps/sanitized fixtures | BLOCKED_OWNER_INPUT | source-specific trial reconciliation |
 | OPS-001 | R-008, R-009, R-016 | EVAL-002, FND-004, ADP-002, REC-001 | ops/backup/runbook/tests | BACKLOG | application-consistent restore/RPO/RTO |
 | PILOT-001 | R-001..R-022 except R-010 post-MVP delivery | FLOW-001, FLOW-002, FLOW-003, CRM-001, UNIT-001, ISOFIX-001, UX-001, RPT-001, OPS-001, REC-001 | pilot E2E/evidence | BACKLOG | MVP-AC-01..15 |
