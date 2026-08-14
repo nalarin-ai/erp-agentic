@@ -181,7 +181,7 @@ Done when: complete synthetic vertical slice runs offline.
 **Requirements:** R-007, R-008
 **Dependencies:** FND-004, ADP-001
 **Owned paths:** `src/reconciliation/**`, `ui/reconciliation/**`, `tests/reconciliation/**`, `docs/runbooks/reconciliation.md`
-**Status:** `READY`
+**Status:** `DONE`
 
 Steps:
 1. Test present/absent/ambiguous/unavailable classification with fencing.
@@ -346,7 +346,7 @@ Done when: UX evidence matrix and independent review pass.
 **Requirements:** R-005, R-008
 **Dependencies:** FND-001, ADP-001
 **Owned paths:** `src/imports/**`, `tests/imports/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Test hostile/synthetic CSV/XLSX with strict format/size/row/decompression limits.

@@ -2,11 +2,11 @@
 
 - Status: `FREE`
 - Owner: none
-- Session/run ID: `adp-001-claim-20260814T080127Z` (released)
-- Task ID: none
+- Session/run ID: `rec-001-claim-20260814T083918Z` (completed)
+- Task ID: `REC-001` — DONE at commit `b38df4a`
 - Worktree: `/home/tejo/agentic/projects/erp-kreasi-hebat`
-- Owned paths: none
-- Claimed at: `2026-08-14T08:01:27Z`
-- Heartbeat: `2026-08-14T08:41:00Z` (released setelah commit ADP-001 `962bbfa` + gates PASS)
-- Expires at: n/a
-- Recovery basis: ADP-001 selesai penuh — TDD RED→GREEN, independent QA round 1 (`deleg_55975a17`, PASS-with-findings), remediasi TDD 9+3 regression tests, fresh QA retry (`deleg_1de07fd8`) PASS dengan 7/7 mutants killed; full suite 206/206 PASS; compileall PASS; git diff --check PASS; validator resync PASS (190/190 mutation suite); commit lokal `962bbfa`; tick berikutnya claim REC-001 (READY, deps FND-004/ADP-001 satisfied, path disjoint).
+- Owned paths: `src/reconciliation/**`, `ui/reconciliation/**`, `tests/reconciliation/**`, `docs/runbooks/reconciliation.md`
+- Claimed at: `2026-08-14T08:39:18Z`
+- Heartbeat: `2026-08-14T09:58:00Z` (REC-001 DONE: independent QA retry PASS, 242/242 PASS, validator PASS, committed `b38df4a`; lease released)
+- Expires at: n/a (released)
+- Recovery basis: tick lanjutan setelah ADP-001 DONE (commit `962bbfa`+`5c89b0e`, 206/206 PASS, validator PASS, lease FREE). Claim REC-001 (READY, deps FND-004/ADP-001 satisfied, path disjoint). Kandidat dari tick terputus direkonstruksi dan diverifikasi penuh sebelum commit.
