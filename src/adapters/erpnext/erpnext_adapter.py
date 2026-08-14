@@ -18,10 +18,13 @@ Security invariants:
 from __future__ import annotations
 
 import json
+import re
+import socket
 import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
+from datetime import date
 from decimal import Decimal
 from http.cookiejar import CookieJar
 from typing import Any
@@ -54,6 +57,60 @@ class ErpNextConfig:
     site_name: str  # e.g. "erpnext-pilot.localhost"
     admin_password: str  # synthetic only
     timeout_seconds: int = 30
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+def _sanitize_error_body(exc: urllib.error.HTTPError, limit: int = 300) -> str:
+    """Extract a short, safe message from a Frappe error response.
+
+    Never leaks raw tracebacks, server paths, or `_server_messages` blobs.
+    """
+    try:
+        body = exc.read().decode(errors="replace")
+    except Exception:
+        return "HTTP error (unreadable body)"
+    try:
+        err = json.loads(body)
+    except json.JSONDecodeError:
+        msg = body
+    else:
+        msg = err.get("message") or ""
+        if not msg and "_server_messages" in err:
+            try:
+                msgs = json.loads(err["_server_messages"])
+                first = json.loads(msgs[0]) if msgs else {}
+                msg = first.get("message", "")
+            except (json.JSONDecodeError, TypeError, IndexError, AttributeError):
+                msg = ""
+        if not msg:
+            msg = err.get("exc_type", "HTTP error")
+    # Strip any residual traceback-looking content.
+    for marker in ("Traceback", "apps/frappe", "apps/erpnext", "File \""):
+        if marker in msg:
+            msg = msg.split(marker)[0]
+    msg = " ".join(msg.split())  # collapse whitespace/newlines
+    return msg[:limit]
+
+
+def _canonical_amount(raw: Any) -> str:
+    """Normalize an amount to a canonical decimal string (no trailing .0)."""
+    try:
+        dec = Decimal(str(raw))
+    except Exception:
+        return str(raw)
+    return str(int(dec)) if dec == dec.to_integral_value() else str(dec.normalize())
+
+
+def _filters(clauses: list[list[Any]]) -> str:
+    """Build a Frappe filters param safely via json.dumps (no interpolation)."""
+    return json.dumps(clauses)
+
+
+_ISO4217 = re.compile(r"^[A-Z]{3}$")
 
 
 # ---------------------------------------------------------------------------
@@ -113,6 +170,8 @@ class ErpNextAdapter:
             raise UncertainOutcome(f"ERPNext login failed: HTTP {e.code}") from e
         except urllib.error.URLError as e:
             raise UncertainOutcome(f"ERPNext login connection failed: {e.reason}") from e
+        except (TimeoutError, socket.timeout, OSError) as e:
+            raise UncertainOutcome(f"ERPNext login timeout: {e}") from e
         if not isinstance(payload, dict) or "message" not in payload:
             raise UncertainOutcome("ERPNext login returned unexpected payload")
         self._logged_in = True
@@ -125,6 +184,8 @@ class ErpNextAdapter:
         path: str,
         data: dict[str, Any] | None = None,
         params: dict[str, str] | None = None,
+        *,
+        _retried: bool = False,
     ) -> dict[str, Any]:
         """Make HTTP request to ERPNext API using session cookies."""
         if not self._logged_in:
@@ -150,20 +211,18 @@ class ErpNextAdapter:
             with self._opener.open(req, timeout=self._config.timeout_seconds) as resp:
                 return json.loads(resp.read().decode())
         except urllib.error.HTTPError as e:
-            if e.code in (401, 403) and self._logged_in:
-                # Session expired — re-login once and retry.
+            if e.code in (401, 403) and self._logged_in and not _retried:
+                # Session expired — re-login once and retry once.
                 self._logged_in = False
                 self._login()
-                return self._request(method, path, data=data, params=params)
-            body = e.read().decode()
-            try:
-                err = json.loads(body)
-                msg = err.get("message", body)
-            except json.JSONDecodeError:
-                msg = body
-            raise DocumentRejected(f"ERPNext HTTP {e.code}: {msg}") from e
+                return self._request(method, path, data=data, params=params, _retried=True)
+            raise DocumentRejected(
+                f"ERPNext HTTP {e.code}: {_sanitize_error_body(e)}"
+            ) from e
         except urllib.error.URLError as e:
             raise UncertainOutcome(f"ERPNext connection failed: {e.reason}") from e
+        except (TimeoutError, socket.timeout, OSError) as e:
+            raise UncertainOutcome(f"ERPNext request timeout: {e}") from e
 
     def _get(self, path: str, params: dict[str, str] | None = None) -> dict[str, Any]:
         return self._request("GET", path, params=params)
@@ -189,8 +248,8 @@ class ErpNextAdapter:
         }.get(kind, kind)
 
     def _to_erpnext_ref(self, ref: str) -> str:
-        """Convert opaque ref to ERPNext naming (pass-through for now)."""
-        return ref
+        """Convert opaque ref to ERPNext naming. Strips `DRAFT:` prefix."""
+        return self._resolve_draft_ref(ref)
 
     def _from_erpnext_ref(self, name: str) -> str:
         """Convert ERPNext document name to opaque ref."""
@@ -201,8 +260,9 @@ class ErpNextAdapter:
     def create_draft_invoice(self, command: DraftInvoiceCommand) -> str:
         """Create a draft Sales Invoice in ERPNext.
 
-        Reserves nothing: ERPNext draft has no official number until submit.
-        Returns draft reference (ERPNext document name).
+        Returns a draft handle prefixed with `DRAFT:` so that the caller
+        can distinguish it from the official posted reference (which is
+        the bare ERPNext document name).
         """
         # Validate scope
         if command.identity.operating_unit_ref not in self._scope:
@@ -233,13 +293,27 @@ class ErpNextAdapter:
         }
 
         result = self._post("/api/resource/Sales Invoice", payload)
-        return self._from_erpnext_ref(result["data"]["name"])
+        return f"DRAFT:{self._from_erpnext_ref(result['data']['name'])}"
+
+    def _resolve_draft_ref(self, reference: str) -> str:
+        """Strip `DRAFT:` prefix to get the bare ERPNext document name."""
+        if reference.startswith("DRAFT:"):
+            return reference[len("DRAFT:"):]
+        return reference
 
     def read_invoice(self, reference: str) -> InvoiceRecord:
-        """Read back a Sales Invoice from ERPNext."""
+        """Read back a Sales Invoice from ERPNext (fail-closed on scope)."""
         name = self._to_erpnext_ref(reference)
         result = self._get(f"/api/resource/Sales Invoice/{name}")
         data = result["data"]
+
+        # Fail-closed scope check: never expose another unit's document.
+        # An empty authorized scope means "may read nothing".
+        company = data.get("company", "")
+        if not self._scope or (company and company not in self._scope):
+            raise DocumentRejected(
+                f"Invoice {reference} not in authorized scope"
+            )
 
         # Map ERPNext status to contract status
         docstatus = data.get("docstatus", 0)
@@ -255,9 +329,9 @@ class ErpNextAdapter:
         return InvoiceRecord(
             reference=self._from_erpnext_ref(data["name"]),
             status=status,
-            total_amount=str(data.get("grand_total", "0")),
+            total_amount=_canonical_amount(data.get("grand_total", "0")),
             currency=data.get("currency", "IDR"),
-            open_amount=str(data.get("outstanding_amount", "0")),
+            open_amount=_canonical_amount(data.get("outstanding_amount", "0")),
             issued_on=data.get("posting_date", ""),
             due_on=data.get("due_date", ""),
             payload=data,
@@ -321,62 +395,150 @@ class ErpNextAdapter:
         """Create a Payment Entry in ERPNext.
 
         Requires evidence_ref; stores as reference in remarks.
+        Enforces evidence_ref uniqueness: a second payment with the same
+        evidence_ref raises DocumentRejected.
         """
-        if not command.evidence_ref:
-            raise DocumentRejected("Payment requires evidence_ref")
+        if not command.evidence_ref or not command.evidence_ref.strip():
+            raise DocumentRejected("Payment requires non-blank evidence_ref")
+        if not _ISO4217.match(command.currency):
+            raise DocumentRejected(
+                f"Payment currency must be ISO-4217 uppercase, got {command.currency!r}"
+            )
+
+        # Enforce evidence_ref uniqueness (adapter-level, since ERPNext does not).
+        existing = self._get(
+            "/api/resource/Payment Entry",
+            params={
+                "filters": _filters([["reference_no", "=", command.evidence_ref]]),
+                "limit_page_length": "1",
+            },
+        )
+        if existing.get("data"):
+            raise DocumentRejected(
+                f"Duplicate evidence_ref {command.evidence_ref}"
+            )
+
+        # Resolve the invoice to discover the actual Customer (party) and Company.
+        invoice = self.read_invoice(command.invoice_ref)
+        party = invoice.payload.get("customer")
+        company = invoice.payload.get("company")
+        if not party:
+            raise DocumentRejected(
+                f"Invoice {command.invoice_ref} has no customer"
+            )
+        if not company:
+            raise DocumentRejected(
+                f"Invoice {command.invoice_ref} has no company"
+            )
+
+        # Discover default cash/bank account for the company.
+        # We use `Cash - <abbr>` which ERPNext auto-creates for the company.
+        # If absent, ERPNext will reject — that's a fixture issue, not adapter bug.
+        abbr = company.split("-")[0] if "-" in company else company[:3].upper()
+        # UNIT-BM has abbr UBM — but we stored that in _seeder; look up actual abbr
+        # via company doc.
+        company_doc = self._get(f"/api/resource/Company/{company}")
+        abbr = company_doc["data"].get("abbr", abbr)
+        paid_to = f"Cash - {abbr}"
 
         payload = {
             "doctype": "Payment Entry",
             "payment_type": "Receive",
             "party_type": "Customer",
-            "party": command.invoice_ref.split("-")[0],  # Extract customer from invoice ref
+            "party": party,
+            "company": company,
+            "paid_to": paid_to,
             "paid_amount": float(command.amount),
             "received_amount": float(command.amount),
+            "source_exchange_rate": 1.0,
+            "target_exchange_rate": 1.0,
             "reference_no": command.evidence_ref,
-            "reference_date": "2026-08-14",  # Use current date in real impl
+            "reference_date": date.today().isoformat(),
             "remarks": f"Evidence: {command.evidence_ref}; Account: {command.destination_account_alias}",
+            "references": [
+                {
+                    "reference_doctype": "Sales Invoice",
+                    "reference_name": self._to_erpnext_ref(command.invoice_ref),
+                    "allocated_amount": float(command.amount),
+                }
+            ],
         }
 
         result = self._post("/api/resource/Payment Entry", payload)
-        return self._from_erpnext_ref(result["data"]["name"])
+        payment_name = result["data"]["name"]
+        # Submit the payment so it affects the invoice outstanding_amount.
+        self._put(
+            f"/api/resource/Payment Entry/{payment_name}",
+            {"docstatus": 1},
+        )
+        return self._from_erpnext_ref(payment_name)
 
     def read_payment(self, reference: str) -> PaymentRecord:
-        """Read back a Payment Entry from ERPNext."""
+        """Read back a Payment Entry from ERPNext (fail-closed on scope).
+
+        Accepts a plain payment name or a `REV:<name>` reversal handle:
+        a reversal handle reads the cancelled original and reports
+        ``reversal_of`` so callers can prove compensating linkage.
+        """
+        reversal_of: str | None = None
         name = self._to_erpnext_ref(reference)
+        if reference.startswith("REV:"):
+            reversal_of = reference[len("REV:"):]
+            name = reversal_of
         result = self._get(f"/api/resource/Payment Entry/{name}")
         data = result["data"]
 
+        # Fail-closed scope check: never expose another unit's payment.
+        company = data.get("company", "")
+        if not self._scope or (company and company not in self._scope):
+            raise DocumentRejected(
+                f"Payment {reference} not in authorized scope"
+            )
+
+        references = data.get("references") or []
+        invoice_ref = references[0].get("reference_name", "") if references else ""
+
         return PaymentRecord(
             reference=self._from_erpnext_ref(data["name"]),
-            invoice_ref=data.get("references", [{}])[0].get("reference_name", ""),
-            amount=str(data.get("paid_amount", "0")),
+            invoice_ref=invoice_ref,
+            amount=_canonical_amount(data.get("paid_amount", "0")),
             currency=data.get("currency", "IDR"),
             evidence_ref=data.get("reference_no", ""),
             destination_account_alias=data.get("remarks", "").split("Account: ")[-1] if "Account: " in data.get("remarks", "") else "",
-            reversal_of=None,
+            reversal_of=reversal_of,
         )
 
     def reverse_payment(self, command: ReversalCommand) -> str:
-        """Create a compensating Payment Entry reversal in ERPNext.
+        """Reverse a Payment Entry in ERPNext.
 
-        ERPNext supports cancellation; we create a reverse entry instead.
+        ERPNext convention: cancel the original Payment Entry. This frees
+        the invoice's outstanding_amount and prevents double-payment.
+        The returned "reversal reference" is the original payment name
+        prefixed with `REV:` to signal it is a reversal-of record.
+
+        Note: this DOES not create a new Payment Entry (which ERPNext would
+        reject as overpayment); it transitions the original to CANCELLED.
         """
         original = self.read_payment(command.payment_ref)
-
-        payload = {
-            "doctype": "Payment Entry",
-            "payment_type": "Pay",  # Reverse direction
-            "party_type": "Customer",
-            "party": original.invoice_ref.split("-")[0],
-            "paid_amount": float(original.amount),
-            "received_amount": float(original.amount),
-            "reference_no": f"{original.evidence_ref}-REV",
-            "reference_date": "2026-08-14",
-            "remarks": f"Reversal of {command.payment_ref}: {command.reason}",
-        }
-
-        result = self._post("/api/resource/Payment Entry", payload)
-        return self._from_erpnext_ref(result["data"]["name"])
+        # Verify the payment exists and is currently submitted
+        name = self._to_erpnext_ref(command.payment_ref)
+        current = self._get(f"/api/resource/Payment Entry/{name}")
+        docstatus = current["data"].get("docstatus", 0)
+        if docstatus == 2:
+            # Already cancelled — a second reversal is a blind reissue. Reject.
+            raise DocumentRejected(
+                f"Payment {command.payment_ref} already reversed"
+            )
+        if docstatus != 1:
+            raise DocumentRejected(
+                f"Cannot reverse payment in docstatus {docstatus} (expected submitted)"
+            )
+        # Cancel via the standard Frappe cancel method.
+        self._post(
+            "/api/method/frappe.client.cancel",
+            {"doctype": "Payment Entry", "name": name},
+        )
+        return f"REV:{name}"
 
     def cancel_invoice(self, reference: str) -> None:
         """Cancel a Sales Invoice in ERPNext."""
@@ -404,7 +566,7 @@ class ErpNextAdapter:
     ) -> QueryResult:
         """Query Sales Invoices with server-side scope intersection."""
         # Build filters
-        filters = []
+        clauses: list[list[Any]] = []
 
         # Always intersect with authorized scope
         if operating_unit_ref:
@@ -416,31 +578,29 @@ class ErpNextAdapter:
                     scoped=True,
                     total=0,
                 )
-            filters.append(f'["company","=","{operating_unit_ref}"]')
+            clauses.append(["company", "=", operating_unit_ref])
         else:
             # Default to all authorized units
-            scope_list = list(self._scope)
+            scope_list = sorted(self._scope)
             if len(scope_list) == 1:
-                filters.append(f'["company","=","{scope_list[0]}"]')
+                clauses.append(["company", "=", scope_list[0]])
             else:
-                # Multi-unit: use IN operator
-                units_str = json.dumps(scope_list)
-                filters.append(f'["company","in",{units_str}]')
+                clauses.append(["company", "in", scope_list])
 
         if status:
             docstatus = {"DRAFT": 0, "POSTED": 1, "CANCELLED": 2}.get(status)
             if docstatus is not None:
-                filters.append(f'["docstatus","=","{docstatus}"]')
+                clauses.append(["docstatus", "=", docstatus])
 
         if customer_ref:
-            filters.append(f'["customer","=","{customer_ref}"]')
+            clauses.append(["customer", "=", customer_ref])
 
         params = {
             "fields": '["name"]',
             "limit_page_length": "1000",
         }
-        if filters:
-            params["filters"] = f"[{','.join(filters)}]"
+        if clauses:
+            params["filters"] = _filters(clauses)
 
         result = self._get("/api/resource/Sales Invoice", params=params)
         data = result.get("data", [])
@@ -491,31 +651,54 @@ class ErpNextAdapter:
         )
 
     def reconcile_payment(self, evidence_ref: str) -> PaymentRecord:
-        """Classify an uncertain payment by its reserved evidence reference."""
-        # Query by reference_no
+        """Classify an uncertain payment by its reserved evidence reference.
+
+        Scoped to authorized companies and only counts submitted (docstatus=1)
+        payments: a leftover draft Payment Entry after an uncertain submit is
+        NOT authoritative and must not be classified as applied.
+        """
+        clauses: list[list[Any]] = [["reference_no", "=", evidence_ref]]
+        if self._scope:
+            clauses.append(["company", "in", sorted(self._scope)])
         params = {
-            "fields": '["name"]',
-            "filters": f'[["reference_no","=","{evidence_ref}"]]',
+            "fields": '["name","docstatus"]',
+            "filters": _filters(clauses),
         }
         result = self._get("/api/resource/Payment Entry", params=params)
         data = result.get("data", [])
 
-        if not data:
-            raise DocumentRejected(f"No payment with evidence {evidence_ref}")
+        submitted = [d for d in data if d.get("docstatus") == 1]
+        if not submitted:
+            raise DocumentRejected(
+                f"No applied payment with evidence {evidence_ref}"
+            )
 
-        return self.read_payment(data[0]["name"])
+        return self.read_payment(submitted[0]["name"])
 
     def known_draft_refs(self) -> set[str]:
-        """Snapshot of every draft handle this provider issued."""
+        """Snapshot of every draft handle this provider issued.
+
+        Drafts are returned with the `DRAFT:` prefix so callers can
+        distinguish them from posted (official) references.
+        """
         result = self.query_invoices(status="DRAFT")
-        return set(result.references)
+        return {f"DRAFT:{ref}" for ref in result.references}
 
     def payment_evidence_index(self) -> tuple[tuple[str, str], ...]:
-        """(payment_ref, evidence_ref) pairs for payment orphan cross-checks."""
+        """(payment_ref, evidence_ref) pairs for payment orphan cross-checks.
+
+        Scoped server-side to authorized companies: never lists another
+        unit's payments. Empty scope is fail-closed (returns nothing).
+        """
+        if not self._scope:
+            return ()
+        clauses: list[list[Any]] = [["company", "in", sorted(self._scope)]]
         params = {
             "fields": '["name","reference_no"]',
             "limit_page_length": "1000",
         }
+        if clauses:
+            params["filters"] = _filters(clauses)
         result = self._get("/api/resource/Payment Entry", params=params)
         data = result.get("data", [])
 

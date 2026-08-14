@@ -90,6 +90,13 @@ class ErpNextContractMixin:
 
     def setUp(self) -> None:
         self.adapter = self.make_adapter()
+        # Per-test evidence namespace so server-side state doesn't leak across tests.
+        import uuid
+        self._evi_ns = uuid.uuid4().hex[:8]
+
+    def _evi(self, base: str) -> str:
+        """Namespace an evidence_ref for this test."""
+        return f"{base}-{self._evi_ns}"
 
     # -- draft creation ---------------------------------------------------
 
@@ -152,12 +159,13 @@ class ErpNextContractMixin:
         result = self.adapter.post_invoice(draft_ref)
         self.assertEqual(result.outcome, PostingOutcome.POSTED)
 
+        evi = self._evi("EVI-001")
         pay_ref = self.adapter.record_payment(
             DraftPaymentCommand(
                 invoice_ref=result.reference,
                 amount="1000000",
                 currency="IDR",
-                evidence_ref="EVI-001",
+                evidence_ref=evi,
                 destination_account_alias="ACC-OPERASIONAL",
             )
         )
@@ -166,7 +174,7 @@ class ErpNextContractMixin:
         # Read-back payment
         payment = self.adapter.read_payment(pay_ref)
         self.assertEqual(payment.amount, "1000000")
-        self.assertEqual(payment.evidence_ref, "EVI-001")
+        self.assertEqual(payment.evidence_ref, evi)
 
         # Invoice should be fully paid
         invoice = self.adapter.read_invoice(result.reference)
@@ -177,13 +185,14 @@ class ErpNextContractMixin:
         result = self.adapter.post_invoice(draft_ref)
         self.assertEqual(result.outcome, PostingOutcome.POSTED)
 
-        # First payment with EVI-001
+        evi = self._evi("EVI-001")
+        # First payment with evidence ref
         pay_ref1 = self.adapter.record_payment(
             DraftPaymentCommand(
                 invoice_ref=result.reference,
                 amount="500000",
                 currency="IDR",
-                evidence_ref="EVI-001",
+                evidence_ref=evi,
                 destination_account_alias="ACC-OPERASIONAL",
             )
         )
@@ -196,7 +205,7 @@ class ErpNextContractMixin:
                     invoice_ref=result.reference,
                     amount="500000",
                     currency="IDR",
-                    evidence_ref="EVI-001",
+                    evidence_ref=evi,
                     destination_account_alias="ACC-OPERASIONAL",
                 )
             )
@@ -212,7 +221,7 @@ class ErpNextContractMixin:
                     invoice_ref=result.reference,
                     amount="2000000",  # More than total
                     currency="IDR",
-                    evidence_ref="EVI-002",
+                    evidence_ref=self._evi("EVI-002"),
                     destination_account_alias="ACC-OPERASIONAL",
                 )
             )
@@ -229,7 +238,7 @@ class ErpNextContractMixin:
                 invoice_ref=result.reference,
                 amount="1000000",
                 currency="IDR",
-                evidence_ref="EVI-001",
+                evidence_ref=self._evi("EVI-001"),
                 destination_account_alias="ACC-OPERASIONAL",
             )
         )
@@ -303,19 +312,20 @@ class ErpNextContractMixin:
         result = self.adapter.post_invoice(draft_ref)
         self.assertEqual(result.outcome, PostingOutcome.POSTED)
 
+        evi = self._evi("EVI-001")
         self.adapter.record_payment(
             DraftPaymentCommand(
                 invoice_ref=result.reference,
                 amount="1000000",
                 currency="IDR",
-                evidence_ref="EVI-001",
+                evidence_ref=evi,
                 destination_account_alias="ACC-OPERASIONAL",
             )
         )
 
         index = self.adapter.payment_evidence_index()
         evidence_refs = [ev for _, ev in index]
-        self.assertIn("EVI-001", evidence_refs)
+        self.assertIn(evi, evidence_refs)
 
 
 # ---------------------------------------------------------------------------
@@ -333,7 +343,7 @@ class TestErpNextAdapter(ErpNextContractMixin, unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        """Verify ERPNext is running before tests."""
+        """Verify ERPNext is running and seed master data before tests."""
         config = _config()
         adapter = ErpNextAdapter(config, frozenset({"UNIT-BM"}))
         try:
@@ -341,6 +351,11 @@ class TestErpNextAdapter(ErpNextContractMixin, unittest.TestCase):
                 raise unittest.SkipTest("ERPNext pilot not running")
         except UncertainOutcome as e:
             raise unittest.SkipTest(f"ERPNext pilot not running: {e}")
+
+        # Seed master data (Company UNIT-BM, Customer CUST-ALPHA, Item SVC-ADS, ...)
+        # Idempotent: existing docs are left untouched.
+        from tests.integration.erpnext._seeder import seed_master_data
+        seed_master_data(adapter)
 
 
 # ---------------------------------------------------------------------------
