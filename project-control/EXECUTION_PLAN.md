@@ -166,7 +166,7 @@ Done when: all confirmed units are reproducible, invalid settings fail closed, r
 **Requirements:** R-005, R-006, R-007, R-008, R-017
 **Dependencies:** FND-001, FND-004
 **Owned paths:** `src/adapters/fixture/**`, `tests/contracts/erp_port/**`
-**Status:** `READY`
+**Status:** `DONE`
 
 Steps:
 1. Define document/payment/query provider port and tests.
@@ -181,7 +181,7 @@ Done when: complete synthetic vertical slice runs offline.
 **Requirements:** R-007, R-008
 **Dependencies:** FND-004, ADP-001
 **Owned paths:** `src/reconciliation/**`, `ui/reconciliation/**`, `tests/reconciliation/**`, `docs/runbooks/reconciliation.md`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Test present/absent/ambiguous/unavailable classification with fencing.

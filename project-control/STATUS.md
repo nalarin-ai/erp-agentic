@@ -2,15 +2,15 @@
 
 - Public state: `BLOCKED`
 - Tick state: `ACTIVE_PROGRESS`
-- Internal state: `UNIT_001_DONE_ADP_001_READY`
+- Internal state: `ADP_001_DONE_REC_001_READY`
 - Activation: `FULL_AUTO_ACTIVE_WITH_PRODUCTION_PROHIBITIONS`
 - Current task: none claimed post-transition (lease released after commit)
-- Completed tasks: `FND-001`, `FND-002`, `FND-003`, `FND-004`, `UNIT-001`
-- Ready tasks: `ADP-001` (deps FND-001/004)
-- Trusted implementation base: `504abd4` (commit UNIT-001 lokal)
-- Completion baseline: `49101493b5376d3e62176b532896716982f905de77ffee30248945f25884e4a3`
-- Progress: tick ini (1) mereclaim lease stale UNIT-001 (>15 menit) dan merekonstruksi state (kandidat utuh); (2) memverifikasi kandidat warisan (147/147 PASS); (3) independent QA round 1 (`deleg_82bd8428`) FAIL — 1 CRITICAL (orphan DRAFT pada concurrent rollback), 4 HIGH (effective_from regression, bool coercion fail-open, scalar categories char-split, unknown catalog keys diabaikan), 4 MEDIUM, 6 LOW; (4) remediasi TDD penuh: CAS-before-mutation di rollback, guard monotonic effective_from, strict catalog schema + `shared_with` eksplisit, invariant ≤1 PPN issuer, audit `activate_denied`, fail-closed `preview`/`audit_events`, ceiling threshold, immutability settings via MappingProxyType; (5) fresh independent QA retry (`deleg_d54b1e11`) PASS — semua findings closed, 8/8 targeted mutants killed, 200-trial race clean; (6) full suite 159/159 PASS, compileall PASS, git diff --check PASS, plan-gate validator PASS dengan status UNIT-001 DONE dan hash machine-file baru.
-- Active technical findings: none untuk UNIT-001; L1 (settings dict shallow-mutable) sudah ditutup via MappingProxyType.
-- Next action: commit lokal UNIT-001 + transisi kontrol, lalu tick berikutnya claim `ADP-001` (READY, path disjoint `src/adapters/fixture/**`, `tests/contracts/erp_port/**`).
-- Writer lease: `FREE`, released sebelum commit transisi UNIT-001.
-- Safety: semua fixture memakai opaque synthetic refs; tidak ada real account, credential, network, production posting, banking, atau tax execution; tidak ada push/deploy.
+- Completed tasks: `FND-001`, `FND-002`, `FND-003`, `FND-004`, `UNIT-001`, `ADP-001`
+- Ready tasks: `REC-001` (deps FND-004/ADP-001)
+- Trusted implementation base: `962bbfa` (commit ADP-001 lokal)
+- Completion baseline: `c6d145432bd83640bf274ffac1b7413c4fef6d022c41c253a1df74dfa6fcb7d0`
+- Progress: tick ini (1) claim lease baru untuk ADP-001 (`adp-001-claim-20260814T080127Z`); (2) TDD RED — 35/35 contract tests gagal dengan ModuleNotFoundError sebelum implementasi; (3) GREEN — `src/contracts/erp_port.py` (provider-neutral port) + `src/adapters/fixture/erp.py` (deterministic network-disabled fixture adapter dengan failure injection) lulus 35/35; (4) independent QA round 1 (`deleg_55975a17`) PASS-with-findings — 3 HIGH (currency-case, whitespace-evidence, UNCERTAIN-reason-leak), 3 MEDIUM (outage-reads, unconditional-scoped, reconcile-None), 2 LOW; (5) remediasi TDD — 9 regression tests RED-first, lalu perbaikan adapter; (6) fresh independent QA retry (`deleg_1de07fd8`) PASS — ADP-QA-01..08 CLOSED via probe independen, 7/7 mutant baru killed; 2 LOW baru (ADP-QA-09 EVI-REV reservation, ADP-QA-10 payment-path ref leak) ditutup via TDD (3 regression tests RED-first); (7) full suite 206/206 PASS, compileall PASS, git diff --check PASS; (8) validator resync (EXPECTED_STATUS + hash machine-file) — PLAN_VALIDATION=PASS, mutation suite validator 190/190 killed, baseline baru `c6d14543...`.
+- Active technical findings: none; semua ADP-QA-01..10 CLOSED. Observasi non-defect dari QA retry: `reconcile_post`/`reconcile_payment` sengaja tetap berfungsi saat outage sebagai recovery path (terdokumentasi di docstring); validasi currency baris pertama idempoten (double check tidak berbahaya).
+- Next action: commit lokal ADP-001 + transisi kontrol, lalu tick berikutnya claim `REC-001` (READY, path disjoint `src/reconciliation/**`, `ui/reconciliation/**`, `tests/reconciliation/**`, `docs/runbooks/reconciliation.md`).
+- Writer lease: `FREE`, released sesudah commit ADP-001 `962bbfa`.
+- Safety: fixture adapter tidak membuka socket (dibuktikan dengan patch `socket.socket` di contract test); semua refs synthetic opaque; tidak ada credential, network, production posting, banking, tax execution, push, atau deploy.
