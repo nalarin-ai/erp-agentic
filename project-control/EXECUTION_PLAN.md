@@ -226,7 +226,7 @@ Done when: competing sales isolation is proven for built CRM surfaces.
 **Requirements:** R-003, R-011, R-021
 **Dependencies:** EVAL-002, UNIT-001, CRM-001
 **Owned paths:** `tests/security/native_erp/**`, `docs/evidence/native-isolation/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Test all surfaces listed in `NATIVE_ERP_ISOLATION.md` with direct credentials.
