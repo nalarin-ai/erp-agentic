@@ -46,7 +46,7 @@ Done when: no open CRITICAL/HIGH; MEDIUM resolved/accepted; fresh review and gat
 **Requirements:** R-005, R-006, R-009, R-016, R-017, R-019
 **Dependencies:** PLAN-001
 **Owned paths:** `evaluation/erpnext/**`, `docs/evidence/erpnext-audit/**`
-**Status:** `BACKLOG`
+**Status:** `DONE`
 
 Steps:
 1. Audit canonical source/version/license/runtime/API/permissions/localization.
