@@ -28,7 +28,7 @@ Only dependency-satisfied, gate-authorized source tasks may be `READY`; statuses
 | UX-001 | R-004, R-006, R-007, R-011, R-020, R-021, R-022 | FLOW-001, FLOW-002, FLOW-003 | bounded UI/test/evidence paths | DONE | responsive/keyboard/config lifecycle/independent review |
 | MIG-001 | R-005, R-008 | FND-001, ADP-001 | import/test paths | DONE | hostile fixtures + dry-run/reconcile |
 | MIGSRC-001 | R-005, R-008 | MIG-001, ADP-002 | migration profile/maps/sanitized fixtures | BLOCKED_OWNER_INPUT | source-specific trial reconciliation |
-| OPS-001 | R-008, R-009, R-016 | EVAL-002, FND-004, ADP-002, REC-001 | ops/backup/runbook/tests | READY | application-consistent restore/RPO/RTO |
+| OPS-001 | R-008, R-009, R-016 | EVAL-002, FND-004, ADP-002, REC-001 | ops/backup/runbook/tests | DONE | application-consistent restore/RPO/RTO |
 | PILOT-001 | R-001..R-022 except R-010 post-MVP delivery | FLOW-001, FLOW-002, FLOW-003, CRM-001, UNIT-001, ISOFIX-001, UX-001, RPT-001, OPS-001, REC-001 | pilot E2E/evidence | BACKLOG | MVP-AC-01..15 |
 | INT-001 | R-010 | PILOT-001 | specialist integration/test/evidence | BACKLOG_POST_MVP | read-only connector pattern |
 | MIGDEC-001 | R-005 | PILOT-001, MIG-001 | migration decision | BLOCKED_OWNER_INPUT | exactly one evidence-complete branch |
