@@ -2,11 +2,11 @@
 
 - Status: `FREE`
 - Owner: none
-- Session/run ID: `eval-001-claim-20260814T114500Z` (completed)
-- Task ID: `EVAL-001` — DONE
+- Session/run ID: `eval-002-claim-20260814T114600Z` (completed)
+- Task ID: `EVAL-002` — DONE
 - Worktree: `/home/tejo/agentic/projects/erp-kreasi-hebat`
-- Owned paths: `evaluation/erpnext/**`, `docs/evidence/erpnext-audit/**`
-- Claimed at: `2026-08-14T11:45:00Z`
-- Heartbeat: `2026-08-14T12:00:00Z` (EVAL-001 DONE: read-only audit via GitHub API, independent QA `deleg_a941ac47` PASS_WITH_FINDINGS (3 LOW remediated), 306/306 PASS, compileall PASS, `git diff --check` PASS, plan validator PASS; lease released)
+- Owned paths: n/a (released)
+- Claimed at: `2026-08-14T11:46:00Z`
+- Heartbeat: `2026-08-14T12:00:00Z` (EVAL-002 DONE: backup/restore evidence added, independent QA `deleg_fd8fdb2c` PASS_WITH_FINDINGS (F-01/F-02 remediated), 306/306 PASS, compileall PASS, git diff --check PASS, plan validator PASS; committed `2398c7b`; lease released)
 - Expires at: n/a (released)
-- Recovery basis: EVAL-001 selesai penuh dalam satu tick tanpa interupsi. Tick berikutnya: evaluasi EVAL-002 (isolated ERPNext environment) atau nyatakan lane evaluasi COMPLETE_SCOPE bila environment setup di luar scope cron.
+- Recovery basis: EVAL-002 selesai penuh dalam satu tick setelah recovery dari stale lease tick sebelumnya. Tick berikutnya: claim `ADP-002` (READY — all deps DONE) atau `EVAL-003` (BACKLOG_OPTIONAL, artefak committed, perlu independent QA).
