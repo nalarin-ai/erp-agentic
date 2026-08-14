@@ -1,9 +1,9 @@
 # Plan Gate
 
-Baseline-ID: `DRAFT-cb9f2583e46718d83f9fe6ae24f4e27617548d30cf9f05b0fb230f305725a846`
+Baseline-ID: `DRAFT-c8c177b420db344e5d386652110b0a9ed83dad83bafe6f0e42b2792d91efac40`
 VERDICT: PASS
 
-Fresh independent FND-002 completion-transition review found 0 CRITICAL, 0 HIGH, and 0 unresolved MEDIUM.
+Fresh independent FND-004 QA retry (`deleg_e64fcb56`, read-only) verdict PASS: 0 CRITICAL, 0 HIGH, 0 unresolved MEDIUM on the remediated candidate; transition review pending below.
 
 Authorized state:
 
@@ -11,24 +11,23 @@ Authorized state:
 - `FND-001`: DONE;
 - `FND-002`: DONE;
 - `FND-003`: DONE;
-- `FND-004`: READY;
-- `UNIT-001`: READY (dependencies `FND-001`, `FND-002`, `FND-003` satisfied);
+- `FND-004`: DONE;
+- `UNIT-001`: READY;
+- `ADP-001`: READY (dependencies `FND-001`, `FND-004` satisfied);
 - no other task promoted.
 
 Evidence:
 
-- trusted implementation base `f5860d3c5482604cabca64b7d8d78e27ded3116c`;
-- final source candidate `c9971565876fa8772b5c6fd4153f218e1affe38b84818ef45f42f63599fd6088` independently passed code QA;
-- integrated transition candidate `1e4ab3f5d7fe184f657989648bdd486b6d86307664d9dcc0593ae321e2226773` independently passed transition review;
-- reviewers `deleg_bf2be0ff` and `deleg_52a426a8`, both read-only;
-- 12/12 focused authz tests and 26/26 full unit tests PASS;
-- independent behavioral matrix 15/15 PASS;
-- official mutation suite 190/190 killed;
-- compileall and validator PASS;
-- 22 requirements, 30 plan tasks, 30 queue rows, 68 acyclic edges;
-- exact plan hash `c1063330c49d27b92de8383f08375954b7293c657829a7647d08137513f432bf`;
-- exact queue hash `2fbea9d11bfbfa9648861dfec771ee127c5a91931ef64e01693fbb43c27b230f`;
-- scope, dependency, path, approval boundary, prohibitions, secret/network/provider scans, and temporary-index diff PASS;
-- writer lease released to FREE.
+- trusted implementation base `164cb2e` (FND-004 local commit);
+- 107/107 full unittest PASS (mutation_audit focused 45/45);
+- compileall PASS; `git diff --check` PASS;
+- plan-gate structural validator PASS (22 requirements, 30 plan/queue tasks, DAG, owned paths, approval boundary, no secrets);
+- official validator mutation suite 190/190 killed;
+- FND-004 targeted adversarial mutants 15/15 killed;
+- independent QA round 1 (`deleg_abe7c340`): FAIL (1 CRITICAL duplicate-provider-on-PENDING-retry, 2 HIGH durable-fencing/atomic-audit, 2 MEDIUM, 4 LOW) — remediated via TDD;
+- independent QA retry (`deleg_e64fcb56`): PASS, all findings verified closed, 5/5 fresh mutants killed, probes A/B2 PASS, workspace byte-identical;
+- QA-04 deferred to REC-001 (durable audit writer/queue); QA-08/QA-09 accepted fixture limits;
+- exact plan hash `ff75ab15225b4c96a9d6126689c0bbb007f5f5548313cd30f93d31f08bee1f0a`;
+- exact queue hash `20c38285b70cb42f2005ac52e673bc17f846933540683796aaf184e46b12d206`.
 
 Hermes may claim one dependency-ready task under a new one-writer lease. TDD and independent read-only QA remain mandatory. Production/live/official posting/banking/tax/destructive prohibitions remain unchanged.

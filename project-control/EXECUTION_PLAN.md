@@ -136,7 +136,7 @@ Done when: invalid combinations cannot reach adapters; fixture decisions are det
 **Requirements:** R-007, R-008
 **Dependencies:** FND-001
 **Owned paths:** `src/mutations/**`, `src/audit/**`, `db/migrations/mutation_audit/**`, `tests/mutation_audit/**`
-**Status:** `READY`
+**Status:** `DONE`
 
 Steps:
 1. Test namespaced hash, CAS claim, fencing/lease, stale worker, and every crash boundary.
@@ -166,7 +166,7 @@ Done when: all confirmed units are reproducible, invalid settings fail closed, r
 **Requirements:** R-005, R-006, R-007, R-008, R-017
 **Dependencies:** FND-001, FND-004
 **Owned paths:** `src/adapters/fixture/**`, `tests/contracts/erp_port/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Define document/payment/query provider port and tests.
