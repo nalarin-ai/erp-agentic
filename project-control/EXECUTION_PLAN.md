@@ -331,7 +331,7 @@ Done when: owner roll-up reconciles and unit users see no cross-unit data.
 **Requirements:** R-004, R-006, R-007, R-011, R-020, R-021, R-022
 **Dependencies:** FLOW-001, FLOW-002, FLOW-003
 **Owned paths:** `ui/invoice_review/**`, `ui/receivables/**`, `tests/ui/**`, `docs/evidence/ux/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Implement state/journey tables, assigned-unit selector, branding preview, and typed unit-settings lifecycle from UX specification.
