@@ -1,12 +1,12 @@
 # Writer Lease
 
-- Status: `FREE`
-- Owner: none
-- Session/run ID: `eval-002-claim-20260814T114600Z` (completed)
-- Task ID: `EVAL-002` — DONE
+- Status: `CLAIMED`
+- Owner: `hermes-executor` (cron tick 2026-08-14T12:08:05Z)
+- Session/run ID: `adp-002-claim-20260814T120805Z`
+- Task ID: `ADP-002` — ERPNext adapter/tests
 - Worktree: `/home/tejo/agentic/projects/erp-kreasi-hebat`
-- Owned paths: n/a (released)
-- Claimed at: `2026-08-14T11:46:00Z`
-- Heartbeat: `2026-08-14T12:00:00Z` (EVAL-002 DONE: backup/restore evidence added, independent QA `deleg_fd8fdb2c` PASS_WITH_FINDINGS (F-01/F-02 remediated), 306/306 PASS, compileall PASS, git diff --check PASS, plan validator PASS; committed `2398c7b`; lease released)
-- Expires at: n/a (released)
-- Recovery basis: EVAL-002 selesai penuh dalam satu tick setelah recovery dari stale lease tick sebelumnya. Tick berikutnya: claim `ADP-002` (READY — all deps DONE) atau `EVAL-003` (BACKLOG_OPTIONAL, artefak committed, perlu independent QA).
+- Owned paths: `src/adapters/erpnext/**`, `tests/integration/erpnext/**`
+- Claimed at: `2026-08-14T12:08:05Z`
+- Heartbeat: `2026-08-14T12:08:05Z` (claim initiated; PLAN_GATE PASS verified; FULL_AUTO ACTIVE verified; all deps DONE)
+- Expires at: `2026-08-14T12:23:05Z` (15 min TTL)
+- Recovery basis: PLAN_GATE PASS (baseline `960349ee...`), FULL_AUTO ACTIVE (project/profile/repo/bot/identity bound), all ADP-002 deps DONE (EVAL-002, ADP-001, FND-002, FND-003, FND-004, REC-001). Task promoted from BACKLOG → READY → CLAIMED.
