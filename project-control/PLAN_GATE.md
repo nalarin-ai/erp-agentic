@@ -1,7 +1,9 @@
 # Plan Gate
 
-Baseline-ID: `DRAFT-95fc759a7856b9a104e9000c6fc76848b4287930a5cfe3dbef2d86d6bbc7a957`
+Baseline-ID: `DRAFT-bc5357e774ee9528969903d4c9d5e32ec0911d4d1db9e8937d3bdc9bda2191f7`
 VERDICT: PASS
+
+PILOT-001 transition (2026-08-15T03:05Z): seluruh MVP-AC-01..15 PASS pada permukaan synthetic — suite focused tests/e2e/pilot 110/110 OK (1 skip by-design) dalam 3 slice (a16073e AC-01/02/03/04/06/13 36 tests; bbdab34 AC-05/07/08/09/10 36 tests; 605a205 AC-11/12/14/15 38 tests) + evidence docs ac-01..ac-15.md + product_fit_report.md. Independent QA per slice: slice-2 `deleg_d5207916` PASS_WITH_FINDINGS (1 LOW QA-S2-01 guard-order acceptance set + 2 INFO; mutants M1/M2/M3/M4 detected); slice-3 final `deleg_cbfbb1f7` PASS (2 INFO: Q-01 count staleness diperbaiki ke 110; Q-02 export/PDF/notification surface opsional — matrix lane ditutup RPT-001) + rekomendasi transisi DONE. Full suite 891 tests: 2 FAIL pre-existing state-dependent fixture (backlog teknis terdaftar) + live-state drift tests (test_qa_remediation 4 FAIL + test_known_draft_refs + 2 ERROR) diverifikasi gagal IDENTIK pada baseline stashed — bukan regresi pilot; 12 skips by-design. compileall + git diff --check + secret-scan bersih; validator PASS baseline bc5357e7. Production tetap BLOCKED (EXP-001/PROD-001).
 
 ISOFIX-001 transition: stale lease direklaim tick ini (heartbeat terakhir 01:04:56Z >15 menit); kandidat uncommitted diverifikasi fresh pre-mutation (focused tests/security/isolation_final 63/63 PASS; full suite 781 = 2 pre-existing state-dependent fixture FAILs + 11 skips by-design, 0 errors; compileall PASS; git diff --check PASS; secret scan bersih; validator PASS baseline 572b5886); fresh independent read-only final-confirmation QA round 2 (`deleg_94563cc0`): **PASS zero findings** — closure QA-01..QA-04 r1 diverifikasi via probe independen aktual (63/63 focused 2x, read-back live pilot: kedua unit users enabled=0 + 0 User Permission rows), adversarial sweep 59 probe fail-closed (case/unicode/injection/non-string/length hostile roles; matriks (role_class, surface) total 21/21 tanpa gap; issuance guard tanpa echo username/role/reason), mutation spot-check 4 mutants: M1/M3/M4 KILLED, M2 SURVIVOR dievaluasi dead-code ekuivalen semantik (cabang unreachable — bukan temuan), 10 live pilot probes: login unit native 401, native API tanpa sesi 403 dengan 0 leak token; 2 pre-existing fixture FAILs dikonfirmasi UNRELATED (tidak ada diff kandidat di tests/integration/, failure murni page-1 membership vs data growth live pilot); 11 skips = ISO-001 native suites skip-by-design pasca-gateway-only (env-gated ISO001_ENABLE_UNIT_USERS=1, rollback path teruji). Transition: EXECUTION_PLAN/TASK_QUEUE ISOFIX-001 → DONE; validator EXPECTED_STATUS + machine-file hashes resynced atomik; validator PASS baseline `95fc759a`; commit pada tick ini; lease FREE.
 
@@ -29,6 +31,7 @@ Authorized state:
 - `UX-001`: DONE;
 - `ISO-001`: DONE;
 - `ISOFIX-001`: DONE;
+- `PILOT-001`: DONE;
 - no other task promoted.
 
 Evidence:
