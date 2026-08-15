@@ -1,10 +1,11 @@
-# ERP Kreasi Hebat
+# ERP Agentic Nalarin.Ai
 
 Provider-neutral ERP integration layer untuk multi-unit bisnis dengan separation of concerns yang tegas antara operating unit, legal issuer, sales ownership, dan financial identity.
 
 ## Fitur Utama
 
-- **Multi-unit architecture** — Banyumedia, Pr1me, Kontraktor, Heavy Equipment, Balonesia
+- **Multi-unit architecture**
+  
 - **Financial identity policy** — Deterministic issuer/tax/series/ledger/account resolution
 - **Unit-scoped RBAC** — Actor-channel-unit assignment dengan fail-closed authorization
 - **Idempotency & audit** — Durable mutation tracking dengan fencing dan crash recovery
