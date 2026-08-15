@@ -41,6 +41,9 @@ from src.policy.financial_identity import (
     TrustedIssuer,
     TrustedIssuerRegistry,
 )
+from src.reconciliation.engine import ReconciliationEngine
+from src.reconciliation.queue import OperatorQueue
+from src.reports.receivables.aging import ReceivablesAgingReport
 from src.units.registry import UnitRegistry
 from src.units.settings import UnitSettingsStore
 from src.workflows.invoice_draft.workflow import (
@@ -52,6 +55,7 @@ from src.workflows.invoice_post.workflow import (
     PostedInvoiceRecord,
     PostResult,
 )
+from src.workflows.payments.workflow import PaymentResult, PaymentWorkflow
 
 T0 = datetime(2026, 8, 14, 0, 0, 0, tzinfo=timezone.utc)
 
@@ -277,6 +281,19 @@ class PilotHarness:
             adapter=self.erp_adapter,
             draft_workflow=self.draft_workflow,
         )
+        # FLOW-003 / REC-001 wiring (slice 2): real payment workflow + AR
+        # aging read model over the same fixture adapter, with the real
+        # reconciliation operator queue (its AuditChain backs AC-09).
+        self.operator_queue = OperatorQueue()
+        self.reconciliation = ReconciliationEngine(self.erp_adapter,
+                                                   self.operator_queue)
+        self.payment_workflow = PaymentWorkflow(
+            registry=self.registry,
+            resolver=self.resolver,
+            adapter=self.erp_adapter,
+            reconciliation=self.reconciliation,
+        )
+        self.receivables = ReceivablesAgingReport(adapter=self.erp_adapter)
         self._seed_actors()
 
     # -- construction --------------------------------------------------------
@@ -384,6 +401,17 @@ class PilotHarness:
             "ACTOR-REVIEWER-MULTI", "CHANNEL-WA-REVIEWER-MULTI",
             (UNIT_BANYUMEDIA, ("FINANCE-REVIEWER",)),
             (UNIT_CONTRACTOR, ("FINANCE-REVIEWER",)),
+        )
+        # AR report readers: QUERY_RECEIVABLE sits on FINANCE-REVIEWER, so
+        # every finance unit gets a reviewer actor for the receivables
+        # read-model assertions (slice 2: AC-05/AC-08).
+        self.banyumedia_ar_reviewer = _actor(
+            "ACTOR-AR-BYM", "CHANNEL-WA-AR-BYM",
+            (UNIT_BANYUMEDIA, ("FINANCE-REVIEWER",)),
+        )
+        self.heavy_equipment_ar_reviewer = _actor(
+            "ACTOR-AR-HEQ", "CHANNEL-WA-AR-HEQ",
+            (UNIT_HEAVY_EQUIPMENT, ("FINANCE-REVIEWER",)),
         )
 
         # CRM roster mirrors the sales assignments (sales actors own leads).
@@ -552,6 +580,86 @@ class PilotHarness:
             effective_from=at(at_minutes + 1),
         )
         return drafted.configuration_version
+
+    # -- payment / receivables flows (FLOW-003) -------------------------------
+
+    def record_payment(
+        self,
+        actor: ActorFixture,
+        invoice_ref: str,
+        *,
+        amount: str,
+        evidence_ref: str,
+        destination_account_alias: str,
+        currency: str = "IDR",
+        idempotency_key: str | None = None,
+        at_minutes: int = 20,
+    ) -> PaymentResult:
+        return self.payment_workflow.record_payment(
+            invoice_ref=invoice_ref,
+            amount=amount,
+            currency=currency,
+            evidence_ref=evidence_ref,
+            destination_account_alias=destination_account_alias,
+            actor_ref=actor.actor_ref,
+            at=at(at_minutes),
+            binding=actor.binding,
+            assignments=actor.all_assignments(),
+            channel_ref=actor.channel_ref,
+            idempotency_key=idempotency_key,
+        )
+
+    def reconcile_payment(
+        self,
+        actor: ActorFixture,
+        evidence_ref: str,
+        *,
+        at_minutes: int = 21,
+    ) -> PaymentResult:
+        return self.payment_workflow.reconcile_payment(
+            evidence_ref=evidence_ref,
+            actor_ref=actor.actor_ref,
+            at=at(at_minutes),
+            binding=actor.binding,
+            assignments=actor.all_assignments(),
+            channel_ref=actor.channel_ref,
+        )
+
+    def reverse_payment(
+        self,
+        actor: ActorFixture,
+        payment_ref: str,
+        *,
+        reason: str,
+        at_minutes: int = 22,
+    ) -> PaymentResult:
+        return self.payment_workflow.reverse_payment(
+            payment_ref=payment_ref,
+            reason=reason,
+            actor_ref=actor.actor_ref,
+            at=at(at_minutes),
+            binding=actor.binding,
+            assignments=actor.all_assignments(),
+            channel_ref=actor.channel_ref,
+        )
+
+    def receivables_open_amount(
+        self,
+        actor: ActorFixture,
+        unit_ref: str,
+        *,
+        at_minutes: int = 23,
+    ) -> str:
+        """AR aging read model (QUERY_RECEIVABLE) for one authorized unit."""
+        result = self.receivables.query_aging(
+            actor_ref=actor.actor_ref,
+            at=at(at_minutes),
+            binding=actor.binding,
+            assignments=actor.all_assignments(),
+            channel_ref=actor.channel_ref,
+            unit_ref=unit_ref,
+        )
+        return result.total_open_amount
 
     # -- canned line fixtures ---------------------------------------------------
 
