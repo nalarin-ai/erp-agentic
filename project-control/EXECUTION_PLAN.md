@@ -241,7 +241,7 @@ Done when: current architecture receives a qualification verdict and any unsafe 
 **Requirements:** R-003, R-011, R-021
 **Dependencies:** ISO-001
 **Owned paths:** `src/isolation_architecture/**`, `environments/isolation-final/**`, `tests/security/isolation_final/**`, `docs/evidence/isolation-final/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Read ISO-001 verdict; if current architecture passed, pin its exact configuration, otherwise implement the selected multi-site or gateway-only alternative including runtime/adapter/config and fixture migration changes.

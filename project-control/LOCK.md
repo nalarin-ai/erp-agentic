@@ -1,6 +1,8 @@
 # Writer Lease
 
-- Status: `FREE`
-- Last task: `ISO-001` — DONE (native ERP isolation qualification: harness+seeder 4 synthetic users + User Permissions, marker records per unit; 8 probe suites, 60 tests / 54 PASS / 6 FAIL-by-design leaks; QA r1 PASS_WITH_FINDINGS F-1 MEDIUM ADR overstated + F-2 LOW matrix staleness → remediated; QA r2 fresh: F-1..F-4 CLOSED, F-5 LOW run-id grouping + F-6 INFO count-inflation probe → remediated (run_id JSONL grouping menggantikan gap heuristic; Customer count-inflation probe simetris BM/P1); QA r3 final confirmation: PASS — ADR counts exact, M3/M4 mutation load-bearing verified; focused 60/6 by-design, full 763 = 6 by-design leaks + 2 pre-existing fixture defects, 0 errors setelah pilot RQ queue drain; validator PASS; verdict REQUIRES_GATEWAY_ONLY → ISOFIX-001)
-- Released at: `2026-08-14T23:55:56Z`
-- Recovery basis: HEAD commit ISO-001 transition = trusted implementation base. Verdict ISO-001: single-site native access untuk unit-scoped roles DISQUALIFIED (Customer unscopeable + File metadata enum + 403/404 oracle); ISOFIX-001 = gateway-only architecture. Backlog teknis: perbaiki 2 state-dependent fixture integration tests (`test_export_is_scope_bounded_with_evidence` CRM; `test_payment_evidence_index` ERPNext adapter — pagination page-1 membership vs live pilot >1000 rows; marker-filtered assertion ala references/live-pilot-stateful-fixture-and-status-mapping.md). Catatan ops: pilot RQ queue sempat penuh (550 jobs, scheduler disabled) — drained via one-shot worker; scheduler di-enable.
+- Status: `CLAIMED`
+- Task: `ISOFIX-001` (final isolation architecture: gateway-only implementation + fresh ISOLATION_FINAL=PASS)
+- Writer: Hermes executor (sole source writer); reviewers read-only
+- Claimed at: `2026-08-15T00:06:42Z`
+- Heartbeat: `2026-08-15T00:06:42Z` (pre-mutation, post validator resync PASS)
+- Basis: ISO-001 verdict REQUIRES_GATEWAY_ONLY (ADR-001); owned paths `src/isolation_architecture/**`, `environments/isolation-final/**`, `tests/security/isolation_final/**`, `docs/evidence/isolation-final/**`. Backlog teknis: perbaiki 2 state-dependent fixture integration tests (`test_export_is_scope_bounded_with_evidence` CRM; `test_payment_evidence_index` ERPNext adapter — marker-filtered assertion ala references/live-pilot-stateful-fixture-and-status-mapping.md). Catatan ops: pilot RQ queue sempat penuh (550 jobs, scheduler disabled) — drained via one-shot worker; scheduler di-enable.
