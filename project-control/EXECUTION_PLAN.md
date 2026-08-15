@@ -391,7 +391,7 @@ Done when: fresh restore evidence reconciles DB/files/config/audit/outbox and me
 **Requirements:** R-001..R-022 except R-010 post-MVP delivery
 **Dependencies:** FLOW-001, FLOW-002, FLOW-003, CRM-001, UNIT-001, ISOFIX-001, UX-001, RPT-001, OPS-001, REC-001
 **Owned paths:** `tests/e2e/pilot/**`, `docs/evidence/pilot/**`
-**Status:** `BACKLOG`
+**Status:** `READY`
 
 Steps:
 1. Seed synthetic roles, multi-unit assignments, versioned unit settings/branding, issuer/tax/ledger/account/customer/services.

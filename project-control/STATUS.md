@@ -2,11 +2,11 @@
 
 - Public state: `ACTIVE_PROGRESS`
 - Tick state: `ACTIVE_PROGRESS`
-- Internal state: `ISOFIX_001_DONE_LEASE_FREE`
+- Internal state: `PILOT_001_CLAIMED_IN_PROGRESS`
 - Activation: `FULL_AUTO_ACTIVE_WITH_PRODUCTION_PROHIBITIONS`
-- Current task: (none — ISOFIX-001 DONE pada tick ini; tidak ada READY tersisa)
+- Current task: `PILOT-001` CLAIMED (synthetic E2E acceptance MVP-AC-01..15; lease acquired 2026-08-15T01:43:26Z)
 - Completed tasks: `FND-001`, `FND-002`, `FND-003`, `FND-004`, `UNIT-001`, `ADP-001`, `REC-001`, `MIG-001`, `FLOW-001`, `EVAL-001`, `EVAL-002`, `ADP-002`, `CRM-001`, `FLOW-002`, `FLOW-003`, `RPT-001`, `UX-001`, `OPS-001`, `ISO-001`, `ISOFIX-001`
-- Ready tasks: (none)
+- Ready tasks: (none — PILOT-001 claimed)
 - Trusted implementation base: ISO-001 transition commit `95311af` (lihat git log HEAD)
 - Completion baseline: `edcbe2b5768b00b1adf507d540a64b8dca45f1814d6ae5f33ffbef3a911ec82f`
 - Progress (OPS-001): (1) lease direklaim lintas tick (21:25Z terputus pasca-remediasi r1; verifikasi parent: 71/71 focused, 696 full dengan 2 pre-existing); (2) independent QA r2 (`deleg_84197b89`): PASS_WITH_FINDINGS — r1 F-01..F-09 CLOSED semua via probe baru + mutasi 4/4 KILLED; 3 temuan baru (2 LOW: traversal `artifact_rel_path`, bypass redaksi unicode homoglyph; 1 INFO: CR/LF event fields); (3) remediasi TDD: 6 regression tests RED-first (5 FAIL awal terverifikasi; traversal-restore PASS dini karena benturan missing-file → dipertahankan sebagai uji end-to-end + ditambah uji skema langsung) → schema fail-closed di `StoreEntry.__post_init__` (absolute/`~`/drive/`.`/`..`/segmen kosong, backslash-normalized), defense-in-depth resolve-containment di `_verify_artifact`, redaksi NFKC+casefold, `_reject_multiline` 5 field → focused 77/77; (4) fresh QA r3 (`deleg_7a393117`): PASS_WITH_FINDINGS — closures r2 diverifikasi (21+25 probe), adversarial 22 probe bersih, M1/M3/M4 KILLED; 1 LOW R3-F-01 (M2 containment SURVIVOR) → ditutup TDD test schema-bypass `object.__new__` dengan checksum valid + kontrol positif; re-hunt M2 parent di /tmp: KILLED; (5) final confirmation QA (`deleg_8561a817`): PASS zero findings — M2 KILLED diverifikasi independen, spot re-probe r2 CLOSED, test dinilai tidak vakum; (6) transition: focused 78/78 (1 skip), full 703 (2 pre-existing), compileall+diff-check+secret-scan bersih, validator PASS; commit pada tick ini; lease FREE.
