@@ -8,9 +8,16 @@ bug, not isolation evidence.
 from __future__ import annotations
 
 import json
+import os
 import unittest
 
 from tests.security.native_erp import _harness as h
+
+_REQUIRES_UNIT_USERS = os.environ.get("ISO001_ENABLE_UNIT_USERS") == "1"
+_SKIP_REASON = (
+    "requires ISO001_ENABLE_UNIT_USERS=1 — post-ISOFIX-001 the pilot steady "
+    "state disables unit-scoped users (gateway-only final architecture)"
+)
 
 
 class TestSeedFixtures(unittest.TestCase):
@@ -43,6 +50,7 @@ class TestSeedFixtures(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(json.loads(body)["data"].get("enabled"), 0)
 
+    @unittest.skipUnless(_REQUIRES_UNIT_USERS, _SKIP_REASON)
     def test_user_permissions_scoped(self) -> None:
         for email, unit in ((h.USER_SALES_BM, h.UNIT_BM),
                             (h.USER_SALES_P1, h.UNIT_P1)):
@@ -55,6 +63,7 @@ class TestSeedFixtures(unittest.TestCase):
             self.assertTrue(json.loads(body).get("data"),
                             f"missing user permission {email}->{unit}")
 
+    @unittest.skipUnless(_REQUIRES_UNIT_USERS, _SKIP_REASON)
     def test_per_user_sessions_login(self) -> None:
         for email in (h.USER_SALES_BM, h.USER_SALES_P1, h.USER_OWNER):
             sess = h.user_session(email)

@@ -1,0 +1,70 @@
+{
+  "config": {
+    "base_url": "http://127.0.0.1:18080",
+    "erpnext_version": "16.32.1",
+    "frappe_version": "16.31.0",
+    "site_name": "erpnext-pilot.localhost"
+  },
+  "config_sha256": "ff6a9123eaccf3a9eacc7008d19ed685837adb1a87370b32311515064ad52282",
+  "findings": [],
+  "generated_at": "2026-08-15T01:03:43.438539+00:00",
+  "matrix_summary": {
+    "leak_positive_probes": 0,
+    "surfaces": {
+      "final-gateway-crm": {
+        "denied": 2,
+        "leaks": 0,
+        "probes": 5
+      },
+      "final-gateway-erp": {
+        "denied": 0,
+        "leaks": 0,
+        "probes": 1
+      },
+      "final-migration": {
+        "denied": 0,
+        "leaks": 0,
+        "probes": 6
+      },
+      "final-native-api": {
+        "denied": 2,
+        "leaks": 0,
+        "probes": 2
+      },
+      "final-native-desk": {
+        "denied": 0,
+        "leaks": 0,
+        "probes": 1
+      },
+      "final-native-direct": {
+        "denied": 1,
+        "leaks": 0,
+        "probes": 1
+      },
+      "final-native-files": {
+        "denied": 2,
+        "leaks": 0,
+        "probes": 2
+      },
+      "final-native-login": {
+        "denied": 2,
+        "leaks": 0,
+        "probes": 2
+      },
+      "final-native-reports": {
+        "denied": 1,
+        "leaks": 0,
+        "probes": 1
+      },
+      "final-native-search": {
+        "denied": 1,
+        "leaks": 0,
+        "probes": 1
+      }
+    },
+    "total_probes": 22
+  },
+  "run_id": "20260815T010337-aeed6c51",
+  "schema_version": 1,
+  "verdict": "PASS"
+}

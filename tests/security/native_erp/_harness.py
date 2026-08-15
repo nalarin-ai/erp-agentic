@@ -346,7 +346,10 @@ def admin_put(doctype: str, name: str, data: dict[str, Any]) -> tuple[int, bytes
 def seed_users() -> dict[str, bool]:
     """Idempotently create synthetic users with roles + unit User Permissions.
 
-    Never deletes; skips whatever already exists. Returns created-flags.
+    Never deletes; repairs drift: existing users are re-enabled (except the
+    deactivated fixture) so the ISO-001 rollback path
+    (ISO001_ENABLE_UNIT_USERS=1) actually restores probe capability.
+    Returns created-flags.
     """
     created: dict[str, bool] = {}
     specs = [
@@ -359,6 +362,17 @@ def seed_users() -> dict[str, bool]:
         key = f"user:{email}"
         if admin_exists("User", email):
             created[key] = False
+            # Repair enabled-drift for all but the deactivated fixture
+            # (re-enabled separately below as a no-op guard).
+            if email != USER_DEACTIVATED:
+                status, body = admin_get(f"/api/resource/User/{email}")
+                if status == 200:
+                    try:
+                        enabled = int(json.loads(body)["data"].get("enabled", 0))
+                    except (json.JSONDecodeError, KeyError, TypeError, ValueError):
+                        enabled = 0
+                    if enabled != 1:
+                        admin_put("User", email, {"enabled": 1})
         else:
             payload: dict[str, Any] = {
                 "email": email,
@@ -598,7 +612,17 @@ def record_probe(
 
 
 class IsolationProbeTestCase(unittest.TestCase):
-    """Base for ISO-001 probe suites: seeds fixtures, opens per-user sessions."""
+    """Base for ISO-001 probe suites: seeds fixtures, opens per-user sessions.
+
+    Post-ISOFIX-001 the pilot's steady state is gateway-only: unit-scoped
+    users are DISABLED. These historical qualification suites therefore
+    require ISO001_ENABLE_UNIT_USERS=1 (they re-enable the users via the
+    idempotent seeder, probe the native architecture, and their leak
+    failures remain the ISO-001 evidence). Default runs skip them so the
+    final-architecture full suite is green; the recorded JSONL/matrix
+    evidence under docs/evidence/native-isolation/ remains the frozen
+    ISO-001 proof.
+    """
 
     recorder: ProbeRecorder
     sess_bm: UserSession
@@ -607,6 +631,11 @@ class IsolationProbeTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+        if os.environ.get("ISO001_ENABLE_UNIT_USERS") != "1":
+            raise unittest.SkipTest(
+                "ISO-001 native suites require ISO001_ENABLE_UNIT_USERS=1 "
+                "(post-ISOFIX-001 pilot steady state disables unit users)"
+            )
         ensure_all_seeded()
         cls.recorder = ProbeRecorder.instance()
         cls.sess_bm = user_session(USER_SALES_BM)

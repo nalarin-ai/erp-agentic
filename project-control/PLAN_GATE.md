@@ -1,7 +1,9 @@
 # Plan Gate
 
-Baseline-ID: `DRAFT-1ae735ba61c32d0d78fddefb229a66d511a56ff1f90632556ee6ffec9439a134`
+Baseline-ID: `DRAFT-95fc759a7856b9a104e9000c6fc76848b4287930a5cfe3dbef2d86d6bbc7a957`
 VERDICT: PASS
+
+ISOFIX-001 transition: stale lease direklaim tick ini (heartbeat terakhir 01:04:56Z >15 menit); kandidat uncommitted diverifikasi fresh pre-mutation (focused tests/security/isolation_final 63/63 PASS; full suite 781 = 2 pre-existing state-dependent fixture FAILs + 11 skips by-design, 0 errors; compileall PASS; git diff --check PASS; secret scan bersih; validator PASS baseline 572b5886); fresh independent read-only final-confirmation QA round 2 (`deleg_94563cc0`): **PASS zero findings** — closure QA-01..QA-04 r1 diverifikasi via probe independen aktual (63/63 focused 2x, read-back live pilot: kedua unit users enabled=0 + 0 User Permission rows), adversarial sweep 59 probe fail-closed (case/unicode/injection/non-string/length hostile roles; matriks (role_class, surface) total 21/21 tanpa gap; issuance guard tanpa echo username/role/reason), mutation spot-check 4 mutants: M1/M3/M4 KILLED, M2 SURVIVOR dievaluasi dead-code ekuivalen semantik (cabang unreachable — bukan temuan), 10 live pilot probes: login unit native 401, native API tanpa sesi 403 dengan 0 leak token; 2 pre-existing fixture FAILs dikonfirmasi UNRELATED (tidak ada diff kandidat di tests/integration/, failure murni page-1 membership vs data growth live pilot); 11 skips = ISO-001 native suites skip-by-design pasca-gateway-only (env-gated ISO001_ENABLE_UNIT_USERS=1, rollback path teruji). Transition: EXECUTION_PLAN/TASK_QUEUE ISOFIX-001 → DONE; validator EXPECTED_STATUS + machine-file hashes resynced atomik; validator PASS baseline `95fc759a`; commit pada tick ini; lease FREE.
 
 Fresh independent UX-001 QA round 2 final (`deleg_1bb3ced2`, read-only) verdict PASS, zero findings above INFO: seluruh temuan round-1 (F-01..F-09) CLOSED via 15 probe independen baru (reason hostile newline/format-spec/HTML/connection-string tak pernah leak; opener_ref wajib keyword-only, audit_events kosong/berbohong tetap deny; alias None/empty/whitespace → copy generik; tab_order diturunkan dari footer_actions; kunci hostile `__proto__`/`<script>` ditolak; remaining_balance hostile tidak pernah raise; rollup partial-null menekan total); adversarial sweep 14 probe 0 temuan ≥LOW (empty actor_roles, scope="SAME" uppercase fail-closed, outcome tak dikenal → processing tanpa false-verify, official_ref="" diblokir, viewport invalid fallback wide); matrix spot-check 11/11 baris jujur; mutation spot-check 4/4 KILLED (M1 SoD comparison removal, M2 reason re-interpolation, M3 evidence_upload check removal, M4 rollup fail-open). Focused suite 81/81 PASS; full suite 623/625 — 2 kegagalan adalah state-dependent fixture defect pre-existing vs live pilot >1000 rows (`test_export_is_scope_bounded_with_evidence` CRM + `test_payment_evidence_index` ERPNext adapter), keduanya dibuktikan gagal di clean tree tanpa kandidat UX-001 (git stash -u), di luar owned paths, backlog teknis tercatat di STATUS.md/LOCK.md.
 
@@ -26,6 +28,7 @@ Authorized state:
 - `RPT-001`: DONE;
 - `UX-001`: DONE;
 - `ISO-001`: DONE;
+- `ISOFIX-001`: DONE;
 - no other task promoted.
 
 Evidence:
