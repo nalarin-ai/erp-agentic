@@ -1,8 +1,8 @@
 # ISO-001 Native ERP Isolation — Probe Matrix
 
-- Generated: 2026-08-14T23:46:58.114098+00:00
+- Generated: 2026-08-15T00:00:39.807984+00:00
 - Target: http://127.0.0.1:18080 (site `erpnext-pilot.localhost`), ERPNext pinned v16.32.1
-- Raw evidence: `raw/probes-20260814.jsonl` (52 probes, latest run)
+- Raw evidence: `raw/probes-20260815.jsonl` (52 probes, latest run)
 
 | Surface | Probes | Leak-positive probes | Denied (401/403/404) |
 |---|---|---|---|
@@ -10,7 +10,7 @@
 | direct_url | 8 | 2 | 6 |
 | jobs_subscriptions | 6 | 0 | 6 |
 | notification_activity | 5 | 0 | 2 |
-| permission_mutation | 5 | 0 | 5 |
+| permission_mutation | 5 | 0 | 4 |
 | report_export | 4 | 0 | 1 |
 | rest_list | 13 | 4 | 0 |
 | search_autocomplete | 7 | 3 | 0 |
